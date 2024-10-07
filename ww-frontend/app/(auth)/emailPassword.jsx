@@ -8,7 +8,7 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 import { fetchSignInMethodsForEmail } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 
@@ -132,6 +132,9 @@ const EmailPassword = () => {
               {isCheckingEmail ? "CHECKING..." : "NEXT"}
             </Text>
           </TouchableOpacity>
+          <Link href={"login"} style={{ textAlign: "center" }}>
+          Already have an account? <Text style={{ color: "blue" }}>LOG IN</Text>
+        </Link>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -175,6 +178,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 20,
+    marginBottom: 20,
     backgroundColor: "#3498DB",
     borderRadius: 50,
     paddingVertical: 15,

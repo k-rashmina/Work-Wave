@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { createUser } from "../../lib/apiRequests/userApiClient";
 import {
   SafeAreaView,
   ScrollView,
@@ -11,6 +12,8 @@ import {
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as Location from "expo-location";
 import { Picker } from "@react-native-picker/picker";
+import { registerUser } from "../(auth)/Auth";
+
 
 const PersonalDetails = () => {
   const { email, password } = useLocalSearchParams();
@@ -141,7 +144,12 @@ const PersonalDetails = () => {
       },
       address,
     };
-    // Handle Firebase sign up
+    registerUser(email, password);
+    createUser(userDetails);
+    alert
+    
+    router.replace("/login");
+
   };
 
   const handleServiceProvider = () => {
