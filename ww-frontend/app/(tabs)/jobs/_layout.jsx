@@ -1,16 +1,36 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { Stack } from 'expo-router'
-import Icon from "react-native-vector-icons/Ionicons"
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { Stack } from "expo-router";
+import Icon from "react-native-vector-icons/Ionicons";
+import Header from "../../components/common/Header";
 
 const BinsLayout = () => {
+  const headerOptions = Header();
   return (
-    <Stack>
-      <Stack.Screen name='index' options={{headerShown: true, title: 'Jobs', headerTitleAlign: 'center'}}/>
+    <Stack
+      screenOptions={{
+        headerShown: true,
+        headerTitleAlign: "center",
+        headerRight: headerOptions.headerRight,
+        headerShadowVisible: false,
+        headerTitleStyle: {
+          fontSize: 24,
+          fontWeight: "bold",
+          fontFamily: "sans-serif-condensed",
+          color: "#3498DB",
+        },
+      }}
+    >
+      <Stack.Screen
+        name="index"
+        options={{
+          title: "Jobs",
+        }}
+      />
     </Stack>
-  )
-}
+  );
+};
 
-export default BinsLayout
+export default BinsLayout;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
