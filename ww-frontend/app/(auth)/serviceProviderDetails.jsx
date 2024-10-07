@@ -15,6 +15,8 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Ionicons } from "@expo/vector-icons"; // Importing icon library
+import { registerUser } from "../(auth)/Auth";
+import { createUser } from "../../lib/apiRequests/userApiClient";
 
 const daysOfWeek = [
   { label: "SUN", value: "sun" },
@@ -152,6 +154,9 @@ const ServiceProviderDetails = () => {
 
     console.log("Service Provider Details:", serviceProviderDetails);
     // Handle Firebase sign up or submission
+    registerUser(email, password);
+    createUser(serviceProviderDetails);
+    router.replace("/login");
   };
 
   return (

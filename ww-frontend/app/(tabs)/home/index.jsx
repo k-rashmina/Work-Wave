@@ -1,8 +1,27 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, BackHandler, Alert } from "react-native";
 import React from "react";
 import { Link } from "expo-router";
+import { useFocusEffect  } from "@react-navigation/native";
 
 const Home = () => {
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        Alert.alert("Hold on!", "Are you sure you want to exit the app?", [
+          { text: "Cancel", onPress: () => null, style: "cancel" },
+          { text: "YES", onPress: () => BackHandler.exitApp() },
+        ]);
+        return true; // Prevent default back button behavior
+      };
+
+      const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        onBackPress
+      );
+      return () => backHandler.remove();
+    }, [])
+  );
   return (
     <View style={styles.container}>
       <Text>Home</Text>
