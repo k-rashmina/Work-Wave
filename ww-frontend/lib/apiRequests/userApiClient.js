@@ -1,6 +1,7 @@
 import ip from "../../ipAddress";
 import { auth } from "../../firebaseConfig";
 import axios from "axios";
+import { Alert } from "react-native";
 
 const PORT = 5000;
 const BASE_URL = `http://${ip}:${PORT}`;
@@ -8,12 +9,20 @@ const BASE_URL = `http://${ip}:${PORT}`;
 // Create a new user
 export const createUser = async (userDetails) => {
   try {
-    const response = await axios.post(`${BASE_URL}/user/create`, userDetails);
+    const response = await axios.post(`${BASE_URL}/user/cusCreate`, userDetails);
+    if (response.status === 200) {
+      Alert.alert('Success', 'Signup successful!');
+    } else {
+      Alert.alert('Error', 'Signup failed. Please try again.');
+    }
     return response.data;
+    
+    
   } catch (error) {
-    console.log("Error creating user: ", error.response.data);
-    return error.response.data;
+    console.error('Error signing up:', error);
+    Alert.alert('Error', 'An error occurred during signup. Please try again later.');
   }
+
 };
 
 // Get user details
