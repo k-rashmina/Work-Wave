@@ -1,11 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const userController = require("../controllers/chamath/userController");
 
-router.post("/create", userController.createUser);
-router.get("/get/:email", userController.getUser);
-router.put("/update/:email", userController.updateUser);
-router.delete("/delete/:email", userController.deleteUser);
-router.get("/getAll", userController.getAllUsers);
+
+const cusCreateCon = require('../controllers/chamath/cusCreate');
+const cusUpdateCon = require('../controllers/chamath/cusUpdate');
+const cusReadCon = require('../controllers/chamath/cusRead');
+const cusDeleteCon = require('../controllers/chamath/cusDelete');  
+
+
+
+
+
+
+router.post('/cusCreate', cusCreateCon);
+router.put('/cusUpdate/:email', cusUpdateCon);
+router.get('/cusRead/:email', cusReadCon);
+router.delete('/cusDelete/:email', cusDeleteCon);
 
 module.exports = router;
