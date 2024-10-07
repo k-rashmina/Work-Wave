@@ -63,6 +63,9 @@ TransactionReport.pdf
 *.sln
 *.sw?
 
+#ip address
+ipAddress.js
+
 
 sd-backend/backend_startup.sh
 sd-frontend/frontend_startup.sh
