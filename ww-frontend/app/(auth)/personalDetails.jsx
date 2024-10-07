@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { createUser } from "../../lib/apiRequests/userApiClient";
 import {
   SafeAreaView,
   ScrollView,
@@ -8,12 +7,14 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as Location from "expo-location";
 import { Picker } from "@react-native-picker/picker";
-import { registerUser } from "../(auth)/Auth";
-
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebaseConfig";
+import { createUser } from "../../lib/apiRequests/userApiClient";
 
 const PersonalDetails = () => {
   const { email, password } = useLocalSearchParams();
@@ -68,7 +69,7 @@ const PersonalDetails = () => {
 
   useEffect(() => {
     if (location) {
-      console.log(location.latitude);
+      console.log(location);
     }
   }, [location]);
 
@@ -144,12 +145,16 @@ const PersonalDetails = () => {
       },
       address,
     };
-    registerUser(email, password);
-    createUser(userDetails);
-    alert
-    
-    router.replace("/login");
 
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        router.push("/login");
+        console.log("Registered as:", userCredential.user.email);
+        createUser(userDetails);
+      })
+      .catch((error) => {
+        console.error("Error signing up:", error.message);
+      });
   };
 
   const handleServiceProvider = () => {
@@ -180,7 +185,10 @@ const PersonalDetails = () => {
         age,
         gender,
         telephone,
-        location,
+        location: JSON.stringify({
+          type: "Point",
+          coordinates: [location.longitude, location.latitude],
+        }),
         address,
       },
     });
@@ -362,7 +370,8 @@ const styles = StyleSheet.create({
   errorText: {
     color: "red",
     fontSize: 14,
-    marginBottom: 10,
+    marginBottom: 20,
+    textAlign: "center",
   },
   buttonGetAddress: {
     backgroundColor: "#009688",
