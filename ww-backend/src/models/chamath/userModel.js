@@ -5,7 +5,6 @@ const userSchema = new schema({
   email: {
     type: String,
     required: true,
-    
   },
   password: {
     type: String,
@@ -40,12 +39,10 @@ const userSchema = new schema({
     type: {
       type: String,
       default: "Point", // GeoJSON type
-      required: false,
     },
     coordinates: {
       type: [Number], // [longitude, latitude]
       index: "2dsphere", // This will allow for geospatial queries
-      required: false,
     },
   },
   category: {
