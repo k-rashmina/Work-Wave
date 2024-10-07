@@ -1,14 +1,22 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
 
 const Pay = () => {
   return (
-    <View>
+    <View style={styles.container}>
       <Text>Work</Text>
     </View>
-  )
-}
+  );
+};
 
-export default Pay
+export default Pay;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    display: "flex",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff",
+  },
+});
