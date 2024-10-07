@@ -1,28 +1,21 @@
-import { Link } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Redirect } from "expo-router";
+import { auth } from "../firebaseConfig";
+import React, { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
 
 export default function App() {
-  return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={[styles.container, {flexGrow: 1}]}>
-        <Link href="/login" style={{ color: "blue", marginBottom: 40 }}>
-          Go to Login
-        </Link> 
-        <Link href="/home" style={{ color: "blue" }}>
-          Go to Home
-        </Link> 
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState(null);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setInitializing(false);
+    });
+    return unsubscribe;
+  }, []);
+
+  if (initializing) return null;
+
+  return user ? <Redirect href="/home" /> : <Redirect href="/login" />;
+}
