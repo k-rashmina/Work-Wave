@@ -31,7 +31,7 @@ export const getUser = async () => {
   try {
     if (user) {
       const email = user.email;
-      const response = await axios.get(`${BASE_URL}/user/get/${email}`);
+      const response = await axios.get(`${BASE_URL}/user/cusRead/${email}`);
       return response.data;
     } else {
       console.log("No user found");
@@ -49,7 +49,7 @@ export const updateUser = async (userDetails) => {
     const user = auth.currentUser;
     if (user) {
       const email = user.email;
-      const response = await axios.put(`${BASE_URL}/user/update/${email}`, {
+      const response = await axios.put(`${BASE_URL}/user/cusUpdate/${email}`, {
         userDetails,
       });
       return response.data;
@@ -66,7 +66,7 @@ export const deleteUser = async () => {
     const user = auth.currentUser;
     if (user) {
       const email = user.email;
-      const response = await axios.delete(`${BASE_URL}/user/delete/${email}`);
+      const response = await axios.delete(`${BASE_URL}/user/cusDelete/${email}`);
       return response.data;
     } else {
       console.log("No user found");
