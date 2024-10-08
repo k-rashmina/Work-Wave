@@ -45,6 +45,11 @@ const userSchema = new schema({
       index: "2dsphere", // This will allow for geospatial queries
     },
   },
+  serviceProvider: {
+    type: Boolean,
+    default: false,
+    required: false,
+  },
   category: {
     type: String,
     default: null,
