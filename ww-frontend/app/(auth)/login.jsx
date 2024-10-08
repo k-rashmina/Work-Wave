@@ -11,8 +11,9 @@ import {
   Alert,
 } from "react-native";
 import { useRouter, Link } from "expo-router";
-import { loginUser } from "../(auth)/Auth";
-import { useFocusEffect  } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebaseConfig";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -21,29 +22,16 @@ const Login = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     setIsLoggingIn(true);
-
-    try {
-      
-      await loginUser(email, password);
-      router.replace("/home"); // Change to your desired page after login
-    } catch (error) {
-      console.error("Firebase login error: ", error.code, error.message);
-      if (error.code === "auth/user-not-found") {
-        setErrorMessage("No user found with this email.");
-      } else if (error.code === "auth/wrong-password") {
-        setErrorMessage("Incorrect password. Please try again.");
-      } else if (error.code === "auth/invalid-email") {
-        setErrorMessage("Invalid email format.");
-      } else if (error.code === "auth/network-request-failed") {
-        setErrorMessage("Network error. Please check your connection.");
-      } else {
-        setErrorMessage("An error occurred. Please try again.");
-      }
-    } finally {
-      setIsLoggingIn(false);
-    }
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        router.push("/home");
+        console.log("Logged in as:", userCredential.user.email);
+      })
+      .catch((error) => {
+        console.error("Error signing in:", error.message);
+      });
   };
 
   useFocusEffect(
@@ -61,8 +49,8 @@ const Login = () => {
         onBackPress
       );
       return () => backHandler.remove();
-    }, [])
-  );
+    }, [])
+  );
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -97,8 +85,9 @@ const Login = () => {
             </Text>
           </TouchableOpacity>
           <Link href={"/emailPassword"} style={{ textAlign: "center" }}>
-        Don't have an account? <Text style={{ color: "blue" }}>SIGN UP</Text>
-      </Link>
+            Don't have an account?{" "}
+            <Text style={{ color: "blue" }}>SIGN UP</Text>
+          </Link>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -155,4 +144,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default Login;

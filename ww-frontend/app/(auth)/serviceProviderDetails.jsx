@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -14,18 +14,19 @@ import { Picker } from "@react-native-picker/picker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { Ionicons } from "@expo/vector-icons"; // Importing icon library
-import { registerUser } from "../(auth)/Auth";
+import { Ionicons } from "@expo/vector-icons";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebaseConfig";
 import { createUser } from "../../lib/apiRequests/userApiClient";
 
 const daysOfWeek = [
-  { label: "SUN", value: "sun" },
-  { label: "MON", value: "mon" },
-  { label: "TUE", value: "tue" },
-  { label: "WED", value: "wed" },
-  { label: "THU", value: "thu" },
-  { label: "FRI", value: "fri" },
-  { label: "SAT", value: "sat" },
+  { label: "SUN", value: "Sunday" },
+  { label: "MON", value: "Monday" },
+  { label: "TUE", value: "TuesDay" },
+  { label: "WED", value: "Wednesday" },
+  { label: "THU", value: "Thursday" },
+  { label: "FRI", value: "Friday" },
+  { label: "SAT", value: "Saturday" },
 ];
 
 const ServiceProviderDetails = () => {
@@ -37,7 +38,7 @@ const ServiceProviderDetails = () => {
     age,
     gender,
     telephone,
-    location,
+    location: locationString,
     address,
   } = useLocalSearchParams();
   const [category, setCategory] = useState("");
@@ -52,6 +53,12 @@ const ServiceProviderDetails = () => {
     experience: "",
   });
   const router = useRouter();
+
+  const location = JSON.parse(locationString);
+
+  useEffect(() => {
+    console.log("Location object:", location); // You can use the location object now
+  }, [location]);
 
   const pickAndUploadImage = async () => {
     const permissionResult =
@@ -151,12 +158,15 @@ const ServiceProviderDetails = () => {
       experience,
       certImageURL,
     };
-
-    console.log("Service Provider Details:", serviceProviderDetails);
-    // Handle Firebase sign up or submission
-    registerUser(email, password);
-    createUser(serviceProviderDetails);
-    router.replace("/login");
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        router.push("/login");
+        console.log("Registered as:", userCredential.user.email);
+        createUser(serviceProviderDetails);
+      })
+      .catch((error) => {
+        console.error("Error signing up:", error.message);
+      });
   };
 
   return (
@@ -327,7 +337,8 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "red",
-    marginBottom: 10,
+    marginBottom: 20,
+    textAlign: "center",
   },
   input: {
     flex: 1,
