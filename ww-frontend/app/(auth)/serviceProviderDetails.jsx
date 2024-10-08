@@ -19,13 +19,13 @@ import { registerUser } from "../(auth)/Auth";
 import { createUser } from "../../lib/apiRequests/userApiClient";
 
 const daysOfWeek = [
-  { label: "SUN", value: "sun" },
-  { label: "MON", value: "mon" },
-  { label: "TUE", value: "tue" },
-  { label: "WED", value: "wed" },
-  { label: "THU", value: "thu" },
-  { label: "FRI", value: "fri" },
-  { label: "SAT", value: "sat" },
+  { label: "SUN", value: "Sunday" },
+  { label: "MON", value: "Monday" },
+  { label: "TUE", value: "TuesDay" },
+  { label: "WED", value: "Wednesday" },
+  { label: "THU", value: "Thursday" },
+  { label: "FRI", value: "Friday" },
+  { label: "SAT", value: "Saturday" },
 ];
 
 const ServiceProviderDetails = () => {
