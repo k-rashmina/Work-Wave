@@ -26,6 +26,25 @@ const PayLayout = () => {
           title: "Work",
         }}
       />
+      <Stack.Screen
+        name="sheduledashboard"
+        options={{
+          title: "Worker Dashboard",
+        }}/>
+
+      <Stack.Screen
+        name="availabledays"
+        options={{
+          title: "Update Your Availability",
+        }}
+      />
+      <Stack.Screen
+        name="sheduledworks"
+        options={{
+          title: "Scheduled Works",
+          }}
+      />
+
     </Stack>
   );
 };
