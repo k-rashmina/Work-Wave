@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
+const { ConvertTimeToUTC } = require("../../util/timeUtil");
 
 const serviceProviderSchema = new schema({
   serviceProvider: {
@@ -9,11 +10,25 @@ const serviceProviderSchema = new schema({
   },
   bidAmount: {
     type: Number,
-    required: true,
+    default: null,
+    required: false,
   },
   bidDescription: {
     type: String,
-    required: true,
+    default: null,
+    required: false,
+  },
+  bidStatus: {
+    type: String,
+    enum: ["pending", "accepted", "rejected"],
+    default: null,
+    required: false,
+  },
+  jobStatus: {
+    type: String,
+    enum: ["pending", "ongoing", "completed"],
+    default: null,
+    required: false,
   },
 });
 
@@ -28,6 +43,7 @@ const jobSchema = new schema({
   },
   jobImages: {
     type: [String],
+    required: false,
   },
   jobCategory: {
     type: String,
@@ -45,7 +61,9 @@ const jobSchema = new schema({
   },
   jobCreatedAt: {
     type: Date,
-    default: Date.now,
+    default: function () {
+      return ConvertTimeToUTC(new Date());
+    },
   },
   jobDuration: {
     type: Number,
@@ -56,10 +74,15 @@ const jobSchema = new schema({
     enum: ["bid", "fixed"],
     required: true,
   },
-  bidClosingDate: {
+  bidClosingAt: {
     type: Date,
     required: function () {
       return this.jobType === "bid";
+    },
+    default: function () {
+      const bidClosingTime = new Date(this.jobCreatedAt);
+      bidClosingTime.setHours(bidClosingTime.getHours() + 24);
+      return bidClosingTime;
     },
   },
   bidStartingPrice: {
@@ -68,9 +91,13 @@ const jobSchema = new schema({
       return this.jobType === "bid";
     },
   },
+  leastBidPrice: {
+    type: Number,
+    required: false,
+  },
   jobStatus: {
     type: String,
-    enum: ["open", "closed"],
+    enum: ["open", "closed", "completed"],
     default: "open",
   },
   jobBudget: {
