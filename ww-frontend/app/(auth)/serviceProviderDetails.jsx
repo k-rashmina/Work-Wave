@@ -41,12 +41,12 @@ const ServiceProviderDetails = () => {
     location: locationString,
     address,
   } = useLocalSearchParams();
+  const [serviceProvider, setServiceProvider] = useState(true);
   const [category, setCategory] = useState("");
-  const [subcategories, setSubcategories] = useState([]);
   const [availableDays, setAvailableDays] = useState([]);
   const [experience, setExperience] = useState("");
   const [image, setImage] = useState(null);
-  const [certImageURL, setCertImageURL] = useState(""); // State to store the image URL
+  const [certImageURL, setCertImageURL] = useState("");
   const [errorMessages, setErrorMessages] = useState({
     category: "",
     availableDays: "",
@@ -55,10 +55,6 @@ const ServiceProviderDetails = () => {
   const router = useRouter();
 
   const location = JSON.parse(locationString);
-
-  useEffect(() => {
-    console.log("Location object:", location); // You can use the location object now
-  }, [location]);
 
   const pickAndUploadImage = async () => {
     const permissionResult =
@@ -153,6 +149,7 @@ const ServiceProviderDetails = () => {
       telephone,
       location,
       address,
+      serviceProvider,
       category,
       availableDays,
       experience,
