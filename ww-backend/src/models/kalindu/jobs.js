@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ConvertTimeToUTC } = require("../../util/timeUtil");
 
 const jobsSchema = new mongoose.Schema(
   {
@@ -27,10 +28,21 @@ const jobsSchema = new mongoose.Schema(
       type: Number,
       default: null,
     },
-    bidClosingDate: {
+    jobCreatedAt: {
+      type: Date,
+      default: function () {
+        return ConvertTimeToUTC(new Date());
+      },
+    },
+    bidClosingAt: {
       type: Date,
       required: function () {
         return this.jobType === "bid";
+      },
+      default: function () {
+        const bidClosingTime = new Date(this.jobCreatedAt);
+        bidClosingTime.setHours(bidClosingTime.getHours() + 24);
+        return bidClosingTime;
       },
     },
     jobBudget: {
@@ -61,6 +73,7 @@ const jobsSchema = new mongoose.Schema(
         },
         bidAmount: {
           type: Number,
+          default: null,
         },
         bidDescription: {
           type: String,
@@ -69,6 +82,7 @@ const jobsSchema = new mongoose.Schema(
         bidStatus: {
           type: String,
           enum: ["pending", "accepted", "rejected"],
+          default: null,
         },
       },
     ],
