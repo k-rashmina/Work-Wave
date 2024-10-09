@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const dbConnect = require("./db-config");
 const routes = require("./routes");
+const updateJobStatus = require("./scheduler/schedular");
 
 //initialization and middleware
 const app = express();
@@ -22,4 +23,5 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
   dbConnect();
+  updateJobStatus();
 });
