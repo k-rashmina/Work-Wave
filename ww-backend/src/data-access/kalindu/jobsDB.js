@@ -7,7 +7,7 @@ const createJob = async (jobDetails) => {
     //saving job details
     const newJob = new jobs(jobDetails);
 
-    console.log("newJob", newJob);
+    // console.log("newJob", newJob);
 
     await newJob.save();
 
