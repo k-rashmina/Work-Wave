@@ -101,7 +101,7 @@ const AvailableDays = ({ userId }) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.title}>Update Your Availability</Text>
+        {/* <Text style={styles.title}>Update Your Availability</Text> */}
         {Object.keys(availableDays).map((day) => (
           <View key={day} style={styles.dayContainer}>
             <Text style={styles.dayText}>{day}</Text>
@@ -124,7 +124,7 @@ const AvailableDays = ({ userId }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     flex: 1,
   },
   title: {
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   updateButton: {
     backgroundColor: '#3498DB',
     paddingVertical: 12,
-    borderRadius: 8,
+    borderRadius: 50,
     marginTop: 30,
   },
   buttonText: {

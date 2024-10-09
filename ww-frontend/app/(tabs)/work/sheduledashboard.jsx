@@ -1,45 +1,66 @@
 // import React from 'react';
 // import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+// import { useNavigation } from '@react-navigation/native'; // Import navigation hook
 
 // const Dashboard = () => {
+//   const navigation = useNavigation(); // Access navigation
+
 //   return (
 //     <ScrollView style={styles.container}>
 //       <Text style={styles.title}>Dashboard</Text>
 
 //       {/* First Row: Available, Unavailable Days */}
 //       <View style={styles.cardRow}>
-//         <View style={styles.card}>
+//         <TouchableOpacity 
+//           style={styles.card} 
+//           onPress={() => navigation.navigate('availabledays')} // Navigate to the available days screen
+//         >
 //           <Text style={styles.cardNumber}>15</Text>
 //           <Text style={styles.cardText}>Available Days</Text>
-//         </View>
-//         <View style={styles.card}>
+//         </TouchableOpacity>
+//         <TouchableOpacity 
+//           style={styles.card} 
+//           onPress={() => navigation.navigate('UnavailableDaysScreen')} // Navigate to the unavailable days screen
+//         >
 //           <Text style={styles.cardNumber}>3</Text>
 //           <Text style={styles.cardText}>Unavailable Days</Text>
-//         </View>
+//         </TouchableOpacity>
 //       </View>
 
 //       {/* Second Row: Scheduled, Rescheduled Works */}
 //       <View style={styles.cardRow}>
-//         <View style={styles.card}>
+//         <TouchableOpacity 
+//           style={styles.card} 
+//           onPress={() => navigation.navigate('sheduledworks')} // Navigate to scheduled works screen
+//         >
 //           <Text style={styles.cardNumber}>15</Text>
 //           <Text style={styles.cardText}>Scheduled Works</Text>
-//         </View>
-//         <View style={styles.card}>
+//         </TouchableOpacity>
+//         <TouchableOpacity 
+//           style={styles.card} 
+//           onPress={() => navigation.navigate('RescheduledWorksScreen')} // Navigate to rescheduled works screen
+//         >
 //           <Text style={styles.cardNumber}>5</Text>
 //           <Text style={styles.cardText}>Rescheduled Works</Text>
-//         </View>
+//         </TouchableOpacity>
 //       </View>
 
 //       {/* Third Row: Completed, Canceled Works */}
 //       <View style={styles.cardRow}>
-//         <View style={styles.card}>
+//         <TouchableOpacity 
+//           style={styles.card} 
+//           onPress={() => navigation.navigate('CompletedWorksScreen')} // Navigate to completed works screen
+//         >
 //           <Text style={styles.cardNumber}>20</Text>
 //           <Text style={styles.cardText}>Completed Works</Text>
-//         </View>
-//         <View style={styles.card}>
+//         </TouchableOpacity>
+//         <TouchableOpacity 
+//           style={styles.card} 
+//           onPress={() => navigation.navigate('CanceledWorksScreen')} // Navigate to canceled works screen
+//         >
 //           <Text style={styles.cardNumber}>2</Text>
 //           <Text style={styles.cardText}>Canceled Works</Text>
-//         </View>
+//         </TouchableOpacity>
 //       </View>
 
 //       {/* Upcoming Works Section */}
@@ -51,7 +72,10 @@
 //         <View style={styles.workDetails}>
 //           <Text style={styles.workTitle}>Job with Client A</Text>
 //           <Text style={styles.workTime}>Scheduled for 10:00 AM</Text>
-//           <TouchableOpacity style={styles.rescheduleButton}>
+//           <TouchableOpacity 
+//             style={styles.rescheduleButton} 
+//             onPress={() => navigation.navigate('RescheduleWorkScreen', { client: 'Client A' })} // Navigate to reschedule work screen
+//           >
 //             <Text style={styles.rescheduleButtonText}>Reschedule</Text>
 //           </TouchableOpacity>
 //         </View>
@@ -62,7 +86,10 @@
 //         <View style={styles.workDetails}>
 //           <Text style={styles.workTitle}>Job with Client B</Text>
 //           <Text style={styles.workTime}>Scheduled for 11:30 AM</Text>
-//           <TouchableOpacity style={styles.rescheduleButton}>
+//           <TouchableOpacity 
+//             style={styles.rescheduleButton} 
+//             onPress={() => navigation.navigate('RescheduleWorkScreen', { client: 'Client B' })} // Navigate to reschedule work screen
+//           >
 //             <Text style={styles.rescheduleButtonText}>Reschedule</Text>
 //           </TouchableOpacity>
 //         </View>
@@ -170,18 +197,18 @@
 // export default Dashboard;
 
 
-
-
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Import navigation hook
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons'; // Import vector icons
 
 const Dashboard = () => {
   const navigation = useNavigation(); // Access navigation
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Dashboard</Text>
+      {/* Upcoming Works Section */}
+      <Text style={styles.sectionTitle}>On Going Tasks</Text>
 
       {/* First Row: Available, Unavailable Days */}
       <View style={styles.cardRow}>
@@ -189,15 +216,15 @@ const Dashboard = () => {
           style={styles.card} 
           onPress={() => navigation.navigate('availabledays')} // Navigate to the available days screen
         >
-          <Text style={styles.cardNumber}>15</Text>
+          <Ionicons name="calendar" size={24} color="#3498DB" style={styles.icon} />
           <Text style={styles.cardText}>Available Days</Text>
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.card} 
           onPress={() => navigation.navigate('UnavailableDaysScreen')} // Navigate to the unavailable days screen
         >
-          <Text style={styles.cardNumber}>3</Text>
-          <Text style={styles.cardText}>Unavailable Days</Text>
+          <Ionicons name="calendar-number" size={24} color="#3498DB" style={styles.icon} />
+          <Text style={styles.cardText}>Calander View</Text>
         </TouchableOpacity>
       </View>
 
@@ -207,14 +234,14 @@ const Dashboard = () => {
           style={styles.card} 
           onPress={() => navigation.navigate('sheduledworks')} // Navigate to scheduled works screen
         >
-          <Text style={styles.cardNumber}>15</Text>
+          <Ionicons name="briefcase" size={24} color="#3498DB" style={styles.icon} />
           <Text style={styles.cardText}>Scheduled Works</Text>
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.card} 
           onPress={() => navigation.navigate('RescheduledWorksScreen')} // Navigate to rescheduled works screen
         >
-          <Text style={styles.cardNumber}>5</Text>
+          <Ionicons name="refresh-circle" size={24} color="#3498DB" style={styles.icon} />
           <Text style={styles.cardText}>Rescheduled Works</Text>
         </TouchableOpacity>
       </View>
@@ -225,14 +252,14 @@ const Dashboard = () => {
           style={styles.card} 
           onPress={() => navigation.navigate('CompletedWorksScreen')} // Navigate to completed works screen
         >
-          <Text style={styles.cardNumber}>20</Text>
+          <Ionicons name="checkmark-circle" size={24} color="#3498DB" style={styles.icon} />
           <Text style={styles.cardText}>Completed Works</Text>
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.card} 
           onPress={() => navigation.navigate('CanceledWorksScreen')} // Navigate to canceled works screen
         >
-          <Text style={styles.cardNumber}>2</Text>
+          <Ionicons name="close-circle" size={24} color="#3498DB" style={styles.icon} />
           <Text style={styles.cardText}>Canceled Works</Text>
         </TouchableOpacity>
       </View>
@@ -242,7 +269,7 @@ const Dashboard = () => {
 
       {/* Work Cards */}
       <View style={styles.workCard}>
-        <Image source={{uri: 'https://via.placeholder.com/150'}} style={styles.workImage} />
+        <Ionicons name="briefcase-outline" size={24} color="#3498DB" />
         <View style={styles.workDetails}>
           <Text style={styles.workTitle}>Job with Client A</Text>
           <Text style={styles.workTime}>Scheduled for 10:00 AM</Text>
@@ -256,7 +283,7 @@ const Dashboard = () => {
       </View>
 
       <View style={styles.workCard}>
-        <Image source={{uri: 'https://via.placeholder.com/150'}} style={styles.workImage} />
+        <Ionicons name="briefcase-outline" size={24} color="#3498DB" />
         <View style={styles.workDetails}>
           <Text style={styles.workTitle}>Job with Client B</Text>
           <Text style={styles.workTime}>Scheduled for 11:30 AM</Text>
@@ -268,7 +295,6 @@ const Dashboard = () => {
           </TouchableOpacity>
         </View>
       </View>
-
     </ScrollView>
   );
 };
@@ -294,7 +320,8 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#f8f8f8',
     borderRadius: 10,
-    padding: 20,
+    paddingVertical: 30,
+    paddingHorizontal: 15,
     width: '48%',
     alignItems: 'center',
     justifyContent: 'center',
@@ -303,17 +330,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3,
     elevation: 3,
-  },
-  cardNumber: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#3498DB',
-    marginBottom: 10,
+    position: 'relative',
   },
   cardText: {
     fontSize: 16,
-    color: '#333',
+    color: '#666',
     textAlign: 'center',
+    marginTop: 10,
+  },
+  icon: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
   },
   sectionTitle: {
     fontSize: 18,
@@ -333,15 +361,10 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 2,
   },
-  workImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 10,
-    marginRight: 15,
-  },
   workDetails: {
     flex: 1,
     justifyContent: 'center',
+    marginLeft: 15,
   },
   workTitle: {
     fontSize: 16,
