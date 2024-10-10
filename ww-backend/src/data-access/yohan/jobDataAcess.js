@@ -16,6 +16,37 @@ class JobDataAccess {
     return jobs;
   }
 
+  //Accept a specific bidder's bod amount and reject all other bidders' bids
+  async acceptBidForJob(jobId, bidderId) {
+    const job = await jobModel.findById(jobId);
+
+    if (!job) {
+      throw new Error("Job not found");
+    }
+
+    let selectedBid = job.bidders.find(
+      (bidder) => bidder.bidderId.toString() === bidderId.toString()
+    );
+
+    if (!selectedBid) {
+      throw new Error("Bidder not found for this job");
+    }
+
+    job.workerId = bidderId;
+    job.bidAmount = selectedBid.bidAmount;
+
+    job.bidders.forEach((bidder) => {
+      if (bidder.bidderId.toString() === bidderId.toString()) {
+        bidder.bidStatus = "accepted";
+      } else {
+        bidder.bidStatus = "rejected";
+      }
+    });
+
+    const updatedJob = await job.save();
+    return updatedJob;
+  }
+
   //Get pending jobs for a specific service provider
   async getPendingJobsForServiceProvider(serviceProviderId) {
     const currentTime = ConvertTimeToUTC(new Date());
