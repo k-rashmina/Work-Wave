@@ -22,6 +22,20 @@ exports.getJobsForJobOwner = async (req, res) => {
   }
 };
 
+// Accept a specific bidder's bid amount and reject all other bidders' bids
+exports.acceptBidForJob = async (req, res) => {
+  try {
+    const updatedJob = await jobService.acceptBidForJob(
+      req.body.jobId,
+      req.body.bidderId
+    );
+    res.status(200).json(updatedJob);
+  } catch (error) {
+    console.log("Error accepting bid for job: ", error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Get all pending jobs for a specific service provider
 exports.getPendingJobsForServiceProvider = async (req, res) => {
   try {
