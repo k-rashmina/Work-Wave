@@ -27,6 +27,34 @@ class JobDataAccess {
     return jobs;
   }
 
+  // Get all accepted jobs for a specific service provider
+  async getAcceptedJobsForServiceProvider(serviceProviderId) {
+    const jobs = await jobModel.find({
+      "bidders.bidderId": serviceProviderId,
+      "bidders.bidStatus": "accepted",
+    });
+    return jobs;
+  }
+
+  //Update bidder's bid amount , bid description and bid status
+  async updateBidForJob(jobId, bidderId, bidAmount, bidDescription) {
+    const updatedJob = await jobModel.findOneAndUpdate(
+      {
+        _id: jobId,
+        "bidders.bidderId": bidderId,
+      },
+      {
+        $set: {
+          "bidders.$.bidAmount": bidAmount,
+          "bidders.$.bidDescription": bidDescription,
+          "bidders.$.bidStatus": "pending",
+        },
+      },
+      { new: true }
+    );
+    return updatedJob;
+  }
+
   // update job status to "onGoing" for all jobs where bidClosingAt has passed
   async updatePendingJobsToOnGoing() {
     const currentTime = ConvertTimeToUTC(new Date());
