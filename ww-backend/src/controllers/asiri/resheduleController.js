@@ -1,4 +1,4 @@
-const AssignedWorker = require("../../models/asiri/assignedWorker");
+const AssignedWorker = require("../../models/kalindu/jobs");
 const User = require("../../models/chamath/userModel");
 const moment = require("moment");
 

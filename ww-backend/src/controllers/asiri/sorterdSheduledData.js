@@ -1,8 +1,7 @@
-
 const User = require("../../models/chamath/userModel"); // Adjust path to your User model
 const AssignedWorker = require("../../models/kalindu/jobs"); // Adjust path to your AssignedWorker model
 
-const getAssignedDates = async (req, res) => {
+const getSortedData = async (req, res) => {
   try {
     console.log("Email received:", req.params.email);
 
@@ -20,7 +19,8 @@ const getAssignedDates = async (req, res) => {
         path: "jobOwner",  // Assuming "jobOwner" is the user reference in AssignedWorker model
         model: "User", 
         select: "firstName lastName telephone category address", // Only select these fields from the user model
-      });
+      })
+      .sort({ assignedDate: 1 }); // Sorting by assignedDate in ascending order (1 for ascending)
 
     // Check if there are any assigned dates
     if (!assignedDates || assignedDates.length === 0) {
@@ -35,4 +35,4 @@ const getAssignedDates = async (req, res) => {
   }
 };
 
-module.exports = { getAssignedDates };
+module.exports = { getSortedData };
