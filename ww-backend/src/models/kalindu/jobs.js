@@ -51,7 +51,7 @@ const jobsSchema = new mongoose.Schema(
     },
     jobStatus: {
       type: String,
-      enum: ["pending", "onGoing", "completed", "rejected "],
+      enum: ["pending", "onGoing", "completed"],
       default: "pending",
     },
     jobOwner: {
@@ -84,6 +84,10 @@ const jobsSchema = new mongoose.Schema(
           enum: ["pending", "accepted", "rejected"],
           default: null,
         },
+        distance: {
+          type: Number,
+          default: null,
+        },
       },
     ],
     assignedDate: {
@@ -91,17 +95,7 @@ const jobsSchema = new mongoose.Schema(
       default: null,
     },
   },
-  {
-    timestamps: {
-      currentTime: () => {
-        const newDate = new Date();
-        const localDate = new Date(
-          newDate.getTime() - newDate.getTimezoneOffset() * 60000
-        );
-        return localDate;
-      },
-    },
-  }
+  { timestamps: true }
 );
 
 const jobs = mongoose.model("jobs", jobsSchema);
