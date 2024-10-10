@@ -1,13 +1,16 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, Alert } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Alert, ScrollView, RefreshControl } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'expo-router';
 import { logoutUser } from '../../(auth)/Auth';
 import axios from 'axios';
 import { auth } from '../../../firebaseConfig';
 import ip from '../../../ipAddress';
+import MembershipStatus from '../../components/chamath/membershipStatus';
+import { useIsFocused } from '@react-navigation/native'; // Import useIsFocused
 
 const Profile = () => {
-  const router = useRouter()
+  const router = useRouter();
+  const isFocused = useIsFocused(); // Add isFocused to track when the screen is focused
 
   const [user, setUser] = useState({
     firstname: '',
@@ -15,26 +18,37 @@ const Profile = () => {
     profileImageURL: '',
   });
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false); // State for pull-to-refresh
 
   const email = auth.currentUser.email;
 
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const response = await axios.get(`http://${ip}:5000/user/cusRead/${email}`);
-        setUser(response.data);
-      } catch (error) {
-        console.error('Error fetching user details:', error);
-        Alert.alert('Error', 'Failed to load user details.');
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Function to fetch user details
+  const fetchUserDetails = async () => {
+    try {
+      const response = await axios.get(`http://${ip}:5000/user/cusRead/${email}`);
+      setUser(response.data);
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+      Alert.alert('Error', 'Failed to load user details.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchUserDetails();
+  // useEffect that runs when the screen is focused
+  useEffect(() => {
+    if (isFocused) {
+      fetchUserDetails(); // Re-fetch user details when the screen is focused
+    }
+  }, [isFocused]); // Dependency on isFocused
+
+  // Pull-to-refresh function
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchUserDetails().then(() => setRefreshing(false)); // Stop refreshing once the data is fetched
   }, []);
 
-
+  // Logout handler
   const handleLogout = () => {
     logoutUser().then(() => {
       router.push("/login");
@@ -45,17 +59,19 @@ const Profile = () => {
     return <Text>Loading...</Text>;
   }
 
-
-  
-
   return (
-    <View style={styles.container}>
-      
-       {/* Displaying user profile picture and name */}
-       {user.profileImageURL ? (
-        <Image 
-          source={{ uri: user.profileImageURL }} 
-          style={styles.profileImage} 
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+      refreshControl={ // Adding pull-to-refresh
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      {/* Displaying user profile picture and name */}
+      {user.profileImageURL ? (
+        <Image
+          source={{ uri: user.profileImageURL }}
+          style={styles.profileImage}
         />
       ) : (
         <Text>No profile picture available</Text>
@@ -63,44 +79,49 @@ const Profile = () => {
       <Text>Welcome,</Text>
       <Text style={styles.heading}>{user.firstName} {user.lastName}</Text>
 
-      <TouchableOpacity 
-        style={styles.button} 
-        onPress={() => router.push('/profile/inqlist')}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => router.push('/profile/userRating')}
       >
-        <Text style={styles.buttonText}>Inquiries</Text>
+        <Text style={styles.buttonText}>Ratings</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity 
-        style={styles.button} 
-        onPress={() => router.push( '/profile/userDetails')}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => router.push('/profile/userDetails')}
       >
         <Text style={styles.buttonText}>User Details</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity 
-        style={styles.logoutButton} 
+      {/* MembershipStatus Component */}
+      <MembershipStatus />
+
+      <TouchableOpacity
+        style={styles.logoutButton}
         onPress={handleLogout}
       >
         <Text style={styles.buttonText}>Logout</Text>
       </TouchableOpacity>
-    </View>
-  )
+    </ScrollView>
+  );
 }
 
-export default Profile
+export default Profile;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f0f0f0',
+    padding: 20,
+  },
+  contentContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
   },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 50,
     color: '#333',
   },
   profileImage: {
@@ -111,12 +132,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   button: {
-    backgroundColor: '#4CAF50', // Theme color
+    backgroundColor: '#3498DB',
     paddingVertical: 15,
     paddingHorizontal: 50,
     borderRadius: 10,
     marginBottom: 20,
-    width: '90%',
+    marginTop: -10,
+    width: '100%',
     alignItems: 'center',
   },
   buttonText: {
@@ -125,15 +147,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   logoutButton: {
-    backgroundColor: '#d9534f', // Red for logout
+    backgroundColor: '#d9534f',
     paddingVertical: 15,
     paddingHorizontal: 50,
     borderRadius: 10,
-    marginTop: 150,
-    width: '90%',
+    marginTop: 20,
+    marginBottom: 40,
+    width: '50%',
     alignItems: 'center',
   },
-
-})
-
-
+});
