@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -15,17 +17,16 @@ const ScheduledWorks = () => {
   const [scheduledWorks, setScheduledWorks] = useState([]);
   const [error, setError] = useState(null);
 
-  const email = auth.currentUser.email;
+  const email = auth.currentUser?.email;
 
   // Fetch assigned dates when component mounts
   useEffect(() => {
     const fetchAssignedDates = async () => {
       try {
         const response = await axios.get(
-          `http://${ip}:5000/shedule/get-scheduled-dates/${email}`
+          `http://${ip}:5000/shedule/get-workdata-bystatus/${email}`
         );
         setScheduledWorks(response.data); // Assuming the API returns an array of scheduled works
-        // console.log("Fetched scheduled works:", response.data);
       } catch (err) {
         setError("Error fetching assigned dates");
       }
@@ -35,21 +36,21 @@ const ScheduledWorks = () => {
     fetchAssignedDates();
 
     // Set up an interval to fetch data every 30 seconds
-    const intervalId = setInterval(fetchAssignedDates, 1000);
+    const intervalId = setInterval(fetchAssignedDates, 30000);
 
     // Clear the interval when the component unmounts
     return () => clearInterval(intervalId);
-  }, []);
+  }, [email]);
 
   const handleReschedule = async (work) => {
     // Show confirmation dialog
     Alert.alert(
       "Confirm Reschedule",
-      "Are you sure you want to reschedule this work?",
+      "Are you sure you want to Cancel this work?",
       [
         {
           text: "Cancel",
-          onPress: () => console.log("Reschedule cancelled"),
+          onPress: () => console.log("Work cancelled"),
           style: "cancel",
         },
         {
@@ -62,7 +63,7 @@ const ScheduledWorks = () => {
               };
 
               const response = await axios.put(
-                `http://${ip}:5000/shedule/reschedule-worker`,
+                `http://${ip}:5000/shedule/cancel-work`,
                 requestData
               );
 
@@ -99,6 +100,26 @@ const ScheduledWorks = () => {
     );
   }
 
+  // Check if scheduledWorks is empty or undefined
+  if (!scheduledWorks || scheduledWorks.length === 0) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.infoText}>No scheduled works found.</Text>
+      </View>
+    );
+  }
+
+  const getStatusColor = (status) => {
+    switch (status.toLowerCase()) {
+      case "ongoing":
+        return "green";
+      case "pending":
+        return "red";
+      default:
+        return "#555"; // Default color for other statuses
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       {scheduledWorks.map((work, index) => (
@@ -107,33 +128,47 @@ const ScheduledWorks = () => {
           <View style={styles.row}>
             <View style={styles.infoBox}>
               <Text style={styles.infoTitle}>
-                {work.jobOwner.firstName + " " + work.jobOwner.lastName}
+                {work?.jobOwner?.firstName + " " + work?.jobOwner?.lastName}
               </Text>
               <Text style={styles.infoSubtitle}>Customer Name</Text>
               <Text style={styles.infoText}>
-                {work.jobOwner.telephone || "+94754538287"}
+                {work?.jobOwner?.telephone || "+94754538287"}
               </Text>
               <Text style={styles.infoSubtitle}>Mobile Number</Text>
             </View>
             <View style={styles.infoBox}>
               <Text style={styles.infoTitle}>
-                {new Date(work.assignedDate).toDateString()}
+                {new Date(work?.assignedDate).toDateString()}
               </Text>
               <Text style={styles.infoSubtitle}>Scheduled Date</Text>
             </View>
+          </View>
+
+          {/* Job Status with dynamic color */}
+          <View style={styles.infoBox}>
+            <Text
+              style={[
+                styles.infoTitle,
+                { color: getStatusColor(work?.jobStatus || "Pending") },
+              ]}
+            >
+              {work?.jobStatus || "Pending"}
+            </Text>
+            <Text style={styles.infoSubtitle}>Job Status</Text>
           </View>
 
           {/* Row 2: Service Type and Address */}
           <View style={styles.row}>
             <View style={styles.infoBox}>
               <Text style={styles.infoTitle}>
-                {work.jobOwner.category || "Plumbing"}
+                {work?.jobOwner?.category || "Plumbing"}
               </Text>
               <Text style={styles.infoSubtitle}>Service Type</Text>
             </View>
             <View style={styles.infoBox}>
               <Text style={styles.infoTitle}>
-                {work.jobOwner.address || "44, Peterson Ave, Nugegoda"}
+                {work?.jobOwner?.address ||
+                  "44, Peterson Ave, Nugegoda, Sri Lanka"}
               </Text>
               <Text style={styles.infoSubtitle}>Customer Address</Text>
             </View>
@@ -145,7 +180,7 @@ const ScheduledWorks = () => {
               style={styles.rescheduleButton}
               onPress={() => handleReschedule(work)}
             >
-              <Text style={styles.rescheduleButtonText}>Reschedule Work</Text>
+              <Text style={styles.rescheduleButtonText}>Cancel Work</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -178,7 +213,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   infoBox: {
-    width: "48%",
+    width: "48%", // Ensures equal width for both columns
   },
   infoTitle: {
     fontSize: 16,
@@ -219,4 +254,3 @@ const styles = StyleSheet.create({
 });
 
 export default ScheduledWorks;
-
