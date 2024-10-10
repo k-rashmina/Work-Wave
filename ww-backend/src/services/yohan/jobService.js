@@ -68,6 +68,54 @@ class JobService {
       );
     }
   }
+
+  async getAcceptedJobsForServiceProvider(email) {
+    try {
+      const serviceProvider = await userDataAccess.getUserByEmail(email);
+
+      if (!serviceProvider || !serviceProvider._id) {
+        throw new Error("Service provider not found");
+      }
+
+      const jobs = await jobDataAccess.getAcceptedJobsForServiceProvider(
+        serviceProvider._id
+      );
+      return jobs;
+    } catch (error) {
+      throw new Error(
+        console.log(
+          "Error getting accepted jobs for service provider: ",
+          error.message
+        ),
+        `Error occurred while getting accepted jobs for service provider: ${error.message}`
+      );
+    }
+  }
+
+  async updateBidForJob(email, jobId, bidAmount, bidDescription) {
+    const serviceProvider = await userDataAccess.getUserByEmail(email);
+
+    if (!serviceProvider || !serviceProvider._id) {
+      throw new Error("Service provider not found");
+    }
+
+    const bidderId = serviceProvider._id;
+
+    try {
+      const updatedJob = await jobDataAccess.updateBidForJob(
+        jobId,
+        bidderId,
+        bidAmount,
+        bidDescription
+      );
+      return updatedJob;
+    } catch (error) {
+      throw new Error(
+        console.log("Error updating bid for job: ", error.message),
+        `Error occurred while updating bid for job: ${error.message}`
+      );
+    }
+  }
 }
 
 module.exports = new JobService();
