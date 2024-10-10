@@ -51,7 +51,7 @@ const jobsSchema = new mongoose.Schema(
     },
     jobStatus: {
       type: String,
-      enum: ["pending", "onGoing", "completed"],
+      enum: ["pending", "onGoing", "completed", "rejected"],
       default: "pending",
     },
     jobOwner: {
@@ -93,6 +93,16 @@ const jobsSchema = new mongoose.Schema(
     assignedDate: {
       type: Date,
       default: null,
+    },
+    jobLocation: {
+      lat: {
+        type: Number,
+        required: true,
+      },
+      lng: {
+        type: Number,
+        required: true,
+      },
     },
   },
   { timestamps: true }
