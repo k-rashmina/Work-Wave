@@ -77,11 +77,21 @@ const userSchema = new schema({
   },
   membership: {
     type: String,
-    enum: ["bronze", "silver", "gold", "platinum"],
+    enum: ["Bronze", "Silver", "Gold", "Platinum"],
     default: null,
     required: false,
   },
+  membershipDiscount: {
+    type: Number,
+    default: 0,
+    required: false,
+  },
   rating: {
+    type: Number,
+    default: 0,
+    required: false,
+  },
+  rateCount: {
     type: Number,
     default: 0,
     required: false,
