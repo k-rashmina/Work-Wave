@@ -51,7 +51,7 @@ const jobsSchema = new mongoose.Schema(
     },
     jobStatus: {
       type: String,
-      enum: ["pending", "onGoing", "completed"],
+      enum: ["pending", "onGoing", "completed", "rejected "],
       default: "pending",
     },
     jobOwner: {
