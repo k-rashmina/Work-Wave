@@ -84,6 +84,10 @@ const jobsSchema = new mongoose.Schema(
           enum: ["pending", "accepted", "rejected"],
           default: null,
         },
+        distance: {
+          type: Number,
+          default: null,
+        },
       },
     ],
     assignedDate: {
