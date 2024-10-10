@@ -8,6 +8,14 @@ class JobDataAccess {
     return newJob;
   }
 
+  // Get all jobs for a specific job owner
+  async getJobsForJobOwner(jobOwnerId) {
+    const jobs = await jobModel.find({
+      jobOwnerId: jobOwnerId,
+    });
+    return jobs;
+  }
+
   //Get pending jobs for a specific service provider
   async getPendingJobsForServiceProvider(serviceProviderId) {
     const currentTime = ConvertTimeToUTC(new Date());
