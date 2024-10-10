@@ -10,6 +10,8 @@ router.get("/jo/:email", (req, res) =>
   jobController.getJobsForJobOwner(req, res)
 );
 
+router.put("/jo/accept", (req, res) => jobController.acceptBidForJob(req, res));
+
 router.get("/jsp/pending/:email", (req, res) =>
   jobController.getPendingJobsForServiceProvider(req, res)
 );
