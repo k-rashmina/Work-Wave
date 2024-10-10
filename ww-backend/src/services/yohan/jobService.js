@@ -34,6 +34,19 @@ class JobService {
     }
   }
 
+  //Accept a specific bidder's bid amount and reject all other bidders' bids
+  async acceptBidForJob(jobId, bidderId) {
+    try {
+      const updatedJob = await jobDataAccess.acceptBidForJob(jobId, bidderId);
+      return updatedJob;
+    } catch (error) {
+      throw new Error(
+        console.log("Error accepting bid for job: ", error.message),
+        `Error occurred while accepting bid for job: ${error.message}`
+      );
+    }
+  }
+
   //Get all pending jobs for a specific service provider
   async getPendingJobsForServiceProvider(email) {
     try {
@@ -46,7 +59,6 @@ class JobService {
       const jobs = await jobDataAccess.getPendingJobsForServiceProvider(
         serviceProvider._id
       );
-      return jobs;
     } catch (error) {
       throw new Error(
         console.log(
