@@ -4,7 +4,7 @@ const AssignedWorker = require("../../models/kalindu/jobs"); // Adjust path to y
 
 const getAssignedDates = async (req, res) => {
   try {
-    console.log("Email received:", req.params.email);
+    // console.log("Email received:", req.params.email);
 
     // Find user by email
     const user = await User.findOne({ email: req.params.email });
