@@ -2,6 +2,7 @@ const jobDataAccess = require("../../data-access/yohan/jobDataAcess");
 const userDataAccess = require("../../data-access/chamath/userDataAccess");
 
 class JobService {
+  //Create a new job
   async createJob(job) {
     try {
       const newJob = await jobDataAccess.createJob(job);
@@ -14,6 +15,26 @@ class JobService {
     }
   }
 
+  //Get all jobs for a specific job owner
+  async getJobsForJobOwner(email) {
+    try {
+      const jobOwner = await userDataAccess.getUserByEmail(email);
+
+      if (!jobOwner || !jobOwner._id) {
+        throw new Error("Job owner not found");
+      }
+
+      const jobs = await jobDataAccess.getJobsForJobOwner(jobOwner._id);
+      return jobs;
+    } catch (error) {
+      throw new Error(
+        console.log("Error getting jobs for job owner: ", error.message),
+        `Error occurred while getting jobs for job owner: ${error.message}`
+      );
+    }
+  }
+
+  //Get all pending jobs for a specific service provider
   async getPendingJobsForServiceProvider(email) {
     try {
       const serviceProvider = await userDataAccess.getUserByEmail(email);
@@ -37,6 +58,33 @@ class JobService {
     }
   }
 
+  //Update bidder's bid amount, bid description
+  async updateBidForJob(email, jobId, bidAmount, bidDescription) {
+    const serviceProvider = await userDataAccess.getUserByEmail(email);
+
+    if (!serviceProvider || !serviceProvider._id) {
+      throw new Error("Service provider not found");
+    }
+
+    const bidderId = serviceProvider._id;
+
+    try {
+      const updatedJob = await jobDataAccess.updateBidForJob(
+        jobId,
+        bidderId,
+        bidAmount,
+        bidDescription
+      );
+      return updatedJob;
+    } catch (error) {
+      throw new Error(
+        console.log("Error updating bid for job: ", error.message),
+        `Error occurred while updating bid for job: ${error.message}`
+      );
+    }
+  }
+
+  //Get all jobs for a specific service provider
   async getJobsForServiceProvider(email) {
     try {
       const serviceProvider = await userDataAccess.getUserByEmail(email);
@@ -57,18 +105,7 @@ class JobService {
     }
   }
 
-  async handleExpiredJobs() {
-    try {
-      const updatedJobs = await jobDataAccess.updatePendingJobsToOnGoing();
-      return updatedJobs;
-    } catch (error) {
-      throw new Error(
-        console.log("Error handling expired jobs: ", error.message),
-        `Error occurred while handling expired jobs: ${error.message}`
-      );
-    }
-  }
-
+  //Get all accepted jobs for a specific service provider
   async getAcceptedJobsForServiceProvider(email) {
     try {
       const serviceProvider = await userDataAccess.getUserByEmail(email);
@@ -92,27 +129,15 @@ class JobService {
     }
   }
 
-  async updateBidForJob(email, jobId, bidAmount, bidDescription) {
-    const serviceProvider = await userDataAccess.getUserByEmail(email);
-
-    if (!serviceProvider || !serviceProvider._id) {
-      throw new Error("Service provider not found");
-    }
-
-    const bidderId = serviceProvider._id;
-
+  //Handle expired jobs
+  async handleExpiredJobs() {
     try {
-      const updatedJob = await jobDataAccess.updateBidForJob(
-        jobId,
-        bidderId,
-        bidAmount,
-        bidDescription
-      );
-      return updatedJob;
+      const updatedJobs = await jobDataAccess.updatePendingJobsToOnGoing();
+      return updatedJobs;
     } catch (error) {
       throw new Error(
-        console.log("Error updating bid for job: ", error.message),
-        `Error occurred while updating bid for job: ${error.message}`
+        console.log("Error handling expired jobs: ", error.message),
+        `Error occurred while handling expired jobs: ${error.message}`
       );
     }
   }
