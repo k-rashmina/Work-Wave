@@ -8,6 +8,12 @@ class JobDataAccess {
     return newJob;
   }
 
+  // Get a specific job by its id
+  async getJobById(jobId) {
+    const job = await jobModel.findById(jobId);
+    return job;
+  }
+
   // Get all jobs for a specific job owner
   async getJobsForJobOwner(jobOwnerId) {
     const jobs = await jobModel.find({
