@@ -27,6 +27,13 @@ const BinsLayout = () => {
           title: "Jobs",
         }}
       />
+
+      <Stack.Screen
+        name="jobDetails/[jobId]"
+        options={{
+          title: "Job Details",
+        }}
+      />
     </Stack>
   );
 };

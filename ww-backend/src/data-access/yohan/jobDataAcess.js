@@ -17,7 +17,7 @@ class JobDataAccess {
   // Get all jobs for a specific job owner
   async getJobsForJobOwner(jobOwnerId) {
     const jobs = await jobModel.find({
-      jobOwnerId: jobOwnerId,
+      jobOwner: jobOwnerId,
     });
     return jobs;
   }

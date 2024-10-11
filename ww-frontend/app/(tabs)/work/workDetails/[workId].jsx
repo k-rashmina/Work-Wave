@@ -9,6 +9,7 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
+  RefreshControl,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import {
@@ -31,69 +32,74 @@ const WorkDetails = () => {
   const [city, setCity] = useState("");
   const [hasUserBid, setHasUserBid] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchJobDetails = async () => {
-      try {
-        // Fetch job details by ID
-        const details = await getJobById(workId);
+  const fetchJobDetails = async () => {
+    setRefreshing(true);
+    try {
+      // Fetch job details by ID
+      const details = await getJobById(workId);
 
-        // Calculate the number of bidders, total bid amount, average bid amount, and minimum bid amount
-        let count = details.bidders.filter(
-          (bidder) => bidder.bidAmount !== null
-        ).length;
-        let totalBid = details.jobBudget;
-        let avgBid = 0;
-        let minBid = details.jobBudget;
+      // Calculate the number of bidders, total bid amount, average bid amount, and minimum bid amount
+      let count = details.bidders.filter(
+        (bidder) => bidder.bidAmount !== null
+      ).length;
+      let totalBid = details.jobBudget;
+      let avgBid = 0;
+      let minBid = details.jobBudget;
 
-        if (details.bidders && details.bidders.length > 0) {
-          details.bidders.forEach((bidder) => {
-            if (bidder.bidAmount) {
-              totalBid += bidder.bidAmount;
-              if (bidder.bidAmount < minBid) {
-                minBid = bidder.bidAmount;
-              }
+      if (details.bidders && details.bidders.length > 0) {
+        details.bidders.forEach((bidder) => {
+          if (bidder.bidAmount) {
+            totalBid += bidder.bidAmount;
+            if (bidder.bidAmount < minBid) {
+              minBid = bidder.bidAmount;
             }
-          });
-          avgBid = totalBid / (count + 1);
-        }
-
-        const updatedDetails = { ...details, avgBid, minBid, count };
-        setJobDetails(updatedDetails);
-
-        // Get city from jobLocation latitude and longitude
-        const { lat, lng } = details.jobLocation;
-        const location = await Location.reverseGeocodeAsync({
-          latitude: lat,
-          longitude: lng,
+          }
         });
-        if (location.length > 0) {
-          setCity(location[0].city);
-        }
-
-        // Get the current user's ID
-        const user = await getUser();
-        const uId = user._id;
-
-        // Check if the current user has submitted a bid
-        const currentUserBid = details.bidders.find(
-          (bidder) => bidder.bidderId === uId && bidder.bidAmount !== null
-        );
-
-        if (currentUserBid) {
-          setHasUserBid(true);
-          setBidAmount(
-            currentUserBid.bidAmount != null
-              ? currentUserBid.bidAmount.toString()
-              : ""
-          );
-          setBidDescription(currentUserBid.bidDescription || "");
-        }
-      } catch (error) {
-        console.log("Error fetching job details:", error);
+        avgBid = totalBid / (count + 1);
       }
-    };
+
+      const updatedDetails = { ...details, avgBid, minBid, count };
+      setJobDetails(updatedDetails);
+
+      // Get city from jobLocation latitude and longitude
+      const { lat, lng } = details.jobLocation;
+      const location = await Location.reverseGeocodeAsync({
+        latitude: lat,
+        longitude: lng,
+      });
+      if (location.length > 0) {
+        setCity(location[0].city);
+      }
+
+      // Get the current user's ID
+      const user = await getUser();
+      const uId = user._id;
+
+      // Check if the current user has submitted a bid
+      const currentUserBid = details.bidders.find(
+        (bidder) => bidder.bidderId === uId && bidder.bidAmount !== null
+      );
+
+      if (currentUserBid) {
+        setHasUserBid(true);
+        setBidAmount(
+          currentUserBid.bidAmount != null
+            ? currentUserBid.bidAmount.toString()
+            : ""
+        );
+        setBidDescription(currentUserBid.bidDescription || "");
+      }
+    } catch (error) {
+      console.log("Error fetching job details:", error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
     fetchJobDetails();
   }, [workId]);
 
@@ -120,7 +126,12 @@ const WorkDetails = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={fetchJobDetails} />
+        }
+      >
         <Text style={styles.title}>{jobDetails.jobTitle}</Text>
 
         <Swiper
@@ -130,15 +141,22 @@ const WorkDetails = () => {
           activeDot={<View style={styles.activeDot} />}
           paginationStyle={styles.pagination}
         >
-          {jobDetails.jobImages.map((image, index) => (
-            <View key={index} style={styles.imageContainer}>
-              <Image
-                source={{ uri: image }}
-                style={styles.jobImage}
-                resizeMode="cover"
-              />
+          {jobDetails.jobImages.length > 0 ? (
+            jobDetails.jobImages.map((image, index) => (
+              <View key={index} style={styles.imageContainer}>
+                <Image
+                  source={{ uri: image }}
+                  style={styles.jobImage}
+                  resizeMode="cover"
+                />
+              </View>
+            ))
+          ) : (
+            <View style={styles.placeholderContainer}>
+              <Icon name="image" size={80} color="#ccc" />
+              <Text style={styles.placeholderText}>No Images Available</Text>
             </View>
-          ))}
+          )}
         </Swiper>
 
         <View style={styles.jobDetails}>
@@ -280,6 +298,17 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderRadius: 0,
+  },
+  placeholderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%", // Adjust height for centering
+  },
+  placeholderText: {
+    marginTop: 8,
+    color: "#ccc",
+    fontSize: 16,
   },
   dot: {
     backgroundColor: "rgba(0,0,0,.2)",

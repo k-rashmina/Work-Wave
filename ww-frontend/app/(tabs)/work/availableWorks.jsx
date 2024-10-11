@@ -93,7 +93,17 @@ const AvailableWorks = () => {
         style={styles.card}
         onPress={() => router.push(`work/workDetails/${item._id}`)}
       >
-        <Image source={{ uri: item.jobImages[0] }} style={styles.jobImage} />
+        {item.jobImages && item.jobImages.length > 0 && item.jobImages[0] ? (
+          <Image
+            source={{ uri: item.jobImages[0] }}
+            style={styles.jobImage}
+            resizeMode="cover"
+          />
+        ) : (
+          <View style={styles.placeholderImage}>
+            <Icon name="image" size={30} color="#bbb" />
+          </View>
+        )}
         <View style={styles.jobDetails}>
           <Text style={styles.jobCategory}>
             {capitalizeFirstLetter(item.jobCategory)}
@@ -220,6 +230,15 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderWidth: 1,
     borderColor: "#ddd",
+  },
+  placeholderImage: {
+    width: 90,
+    height: 90,
+    borderRadius: 12,
+    marginRight: 15,
+    backgroundColor: "#e0e0e0",
+    justifyContent: "center",
+    alignItems: "center",
   },
   jobDetails: {
     flex: 1,
