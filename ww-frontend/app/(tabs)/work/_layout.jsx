@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Stack } from "expo-router";
 import Header from "../../components/common/Header";
-
+import { Link } from "expo-router";
 const PayLayout = () => {
   const headerOptions = Header();
   return (
@@ -29,22 +29,54 @@ const PayLayout = () => {
       <Stack.Screen
         name="sheduledashboard"
         options={{
-          title: "Worker Dashboard",
+
+          title: "Dashboard",
         }}/>
+
+          
+      
+
 
       <Stack.Screen
         name="availabledays"
         options={{
-          title: "Update Your Availability",
+          title: "Available Days",
         }}
       />
       <Stack.Screen
         name="sheduledworks"
         options={{
           title: "Scheduled Works",
-          }}
+        }}
       />
+      <Stack.Screen
+        name="shedulecancel"
+        options={{
+          title: "Re-Scheduled Works",
+        }}
+      />
+      <Stack.Screen
+        name="earnedpoints"
+        options={{
 
+          title: "Customer Ratings",
+          }}
+        
+         
+      />
+      <Stack.Screen
+        name="availableWorks"
+        options={{
+          title: "Available Works",
+        }}
+      />
+      <Stack.Screen
+        name="workDetails/[workId]"
+        options={{
+          title: "Work Details",
+        }}
+
+      />
     </Stack>
   );
 };

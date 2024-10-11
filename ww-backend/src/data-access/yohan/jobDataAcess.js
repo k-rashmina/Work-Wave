@@ -8,6 +8,51 @@ class JobDataAccess {
     return newJob;
   }
 
+  // Get a specific job by its id
+  async getJobById(jobId) {
+    const job = await jobModel.findById(jobId);
+    return job;
+  }
+
+  // Get all jobs for a specific job owner
+  async getJobsForJobOwner(jobOwnerId) {
+    const jobs = await jobModel.find({
+      jobOwner: jobOwnerId,
+    });
+    return jobs;
+  }
+
+  //Accept a specific bidder's bod amount and reject all other bidders' bids
+  async acceptBidForJob(jobId, bidderId) {
+    const job = await jobModel.findById(jobId);
+
+    if (!job) {
+      throw new Error("Job not found");
+    }
+
+    let selectedBid = job.bidders.find(
+      (bidder) => bidder.bidderId.toString() === bidderId.toString()
+    );
+
+    if (!selectedBid) {
+      throw new Error("Bidder not found for this job");
+    }
+
+    job.workerId = bidderId;
+    job.bidAmount = selectedBid.bidAmount;
+
+    job.bidders.forEach((bidder) => {
+      if (bidder.bidderId.toString() === bidderId.toString()) {
+        bidder.bidStatus = "accepted";
+      } else {
+        bidder.bidStatus = "rejected";
+      }
+    });
+
+    const updatedJob = await job.save();
+    return updatedJob;
+  }
+
   //Get pending jobs for a specific service provider
   async getPendingJobsForServiceProvider(serviceProviderId) {
     const currentTime = ConvertTimeToUTC(new Date());
@@ -25,6 +70,34 @@ class JobDataAccess {
       "bidders.bidderId": serviceProviderId,
     });
     return jobs;
+  }
+
+  // Get all accepted jobs for a specific service provider
+  async getAcceptedJobsForServiceProvider(serviceProviderId) {
+    const jobs = await jobModel.find({
+      "bidders.bidderId": serviceProviderId,
+      "bidders.bidStatus": "accepted",
+    });
+    return jobs;
+  }
+
+  //Update bidder's bid amount , bid description and bid status
+  async updateBidForJob(jobId, bidderId, bidAmount, bidDescription) {
+    const updatedJob = await jobModel.findOneAndUpdate(
+      {
+        _id: jobId,
+        "bidders.bidderId": bidderId,
+      },
+      {
+        $set: {
+          "bidders.$.bidAmount": bidAmount,
+          "bidders.$.bidDescription": bidDescription,
+          "bidders.$.bidStatus": "pending",
+        },
+      },
+      { new: true }
+    );
+    return updatedJob;
   }
 
   // update job status to "onGoing" for all jobs where bidClosingAt has passed

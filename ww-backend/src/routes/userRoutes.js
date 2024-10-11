@@ -6,11 +6,14 @@ const cusUpdateCon = require("../controllers/chamath/cusUpdate");
 const cusReadCon = require("../controllers/chamath/cusRead");
 const cusDeleteCon = require("../controllers/chamath/cusDelete");
 const getCusId = require("../controllers/chamath/getCusId");
+const cusUpdateRating = require('../controllers/chamath/ratingUpdate');
 
 router.post("/cusCreate", cusCreateCon);
 router.put("/cusUpdate/:email", cusUpdateCon);
 router.get("/cusRead/:email", cusReadCon);
 router.delete("/cusDelete/:email", cusDeleteCon);
+router.put('/rating/:email', cusUpdateRating);
+
 
 router.get("/getcusid/:email", getCusId);
 

@@ -105,17 +105,7 @@ const jobsSchema = new mongoose.Schema(
       },
     },
   },
-  {
-    timestamps: {
-      currentTime: () => {
-        const newDate = new Date();
-        const localDate = new Date(
-          newDate.getTime() - newDate.getTimezoneOffset() * 60000
-        );
-        return localDate;
-      },
-    },
-  }
+  { timestamps: true }
 );
 
 const jobs = mongoose.model("jobs", jobsSchema);
