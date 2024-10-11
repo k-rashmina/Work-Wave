@@ -30,7 +30,8 @@ const PayLayout = () => {
         name="sheduledashboard"
         options={{
           title: "Worker Dashboard",
-        }}/>
+        }}
+      />
 
       <Stack.Screen
         name="availabledays"
@@ -42,9 +43,20 @@ const PayLayout = () => {
         name="sheduledworks"
         options={{
           title: "Scheduled Works",
-          }}
+        }}
       />
-
+      <Stack.Screen
+        name="availableWorks"
+        options={{
+          title: "Available Works",
+        }}
+      />
+      <Stack.Screen
+        name="workDetails/[workId]"
+        options={{
+          title: "Work Details",
+        }}
+      />
     </Stack>
   );
 };
