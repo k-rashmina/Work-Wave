@@ -100,7 +100,7 @@ const Dashboard = () => {
           onPress={() => navigation.navigate('earnedpoints')} // Navigate to the unavailable days screen
         >
           <Ionicons name="pricetags" size={24} color="#3498DB" style={styles.icon} />
-          <Text style={styles.cardText}>Earned Points</Text>
+          <Text style={styles.cardText}>Customer Ratings</Text>
         </TouchableOpacity>
       </View>
 
