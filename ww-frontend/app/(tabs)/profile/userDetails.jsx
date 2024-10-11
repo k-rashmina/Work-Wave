@@ -290,9 +290,10 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     marginBottom: 2,
     marginTop: 2,
+    
   },
   changePictureButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#3498DB',
     padding: 10,
     borderRadius: 10,
     alignItems: 'center',
@@ -307,18 +308,19 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 1,
+    marginLeft: 10,
     
   },
   input: {
     height: 40,
-    borderColor: '#4CAF50',
+    borderColor: '#3498DB',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 15,
     marginBottom: 15,
     paddingHorizontal: 10,
   },
   button: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#3498DB',
     padding: 15,
     marginHorizontal: 20,
     marginTop: 20,
