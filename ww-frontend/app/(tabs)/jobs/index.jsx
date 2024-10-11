@@ -92,7 +92,7 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default index;
 
 const styles = StyleSheet.create({
   safeArea: {
