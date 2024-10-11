@@ -29,9 +29,14 @@ const PayLayout = () => {
       <Stack.Screen
         name="sheduledashboard"
         options={{
+
+          title: "Dashboard",
+        }}/>
+
           title: "Worker Dashboard",
         }}
       />
+
 
       <Stack.Screen
         name="availabledays"
@@ -54,6 +59,10 @@ const PayLayout = () => {
       <Stack.Screen
         name="earnedpoints"
         options={{
+
+          title: "Customer Ratings",
+          }}
+
           title: "Earned Points",
         }}
       />
@@ -68,6 +77,7 @@ const PayLayout = () => {
         options={{
           title: "Work Details",
         }}
+
       />
     </Stack>
   );
