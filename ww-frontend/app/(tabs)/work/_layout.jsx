@@ -29,7 +29,7 @@ const PayLayout = () => {
       <Stack.Screen
         name="sheduledashboard"
         options={{
-          title: "Worker Dashboard",
+          title: "Dashboard",
         }}/>
 
       <Stack.Screen
@@ -53,7 +53,7 @@ const PayLayout = () => {
        <Stack.Screen
         name="earnedpoints"
         options={{
-          title: "Earned Points",
+          title: "Customer Ratings",
           }}
       />
 
