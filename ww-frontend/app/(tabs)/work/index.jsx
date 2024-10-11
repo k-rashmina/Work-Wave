@@ -6,7 +6,7 @@ const Pay = () => {
   return (
     <View style={styles.container}>
       <Text>Work</Text>
-      <Link href={ "/work/availabledays"}>Go to Available Days</Link>
+     
       <Link href={ "/work/sheduledashboard"}>Go to Shedule Dashboard</Link>
     </View>
   );

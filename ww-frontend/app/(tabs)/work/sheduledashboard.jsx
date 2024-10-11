@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons'; // Import vector icons
 import axios from 'axios'; // Import axios
 import ip from '../../../ipAddress'; 
 import { auth } from "../../../firebaseConfig";
+import PopupButton from "../../components/asiri/calanderbutton";
 
 const Dashboard = () => {
   const navigation = useNavigation(); // Access navigation
@@ -51,7 +52,7 @@ const Dashboard = () => {
     <ScrollView style={styles.container}>
       {/* Upcoming Works Section */}
       <Text style={styles.sectionTitle}>On Going Tasks</Text>
-
+     
       {/* First Row: Available, Unavailable Days */}
       <View style={styles.cardRow}>
         <TouchableOpacity 
@@ -63,10 +64,10 @@ const Dashboard = () => {
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.card} 
-          onPress={() => navigation.navigate('UnavailableDaysScreen')} // Navigate to the unavailable days screen
+          onPress={() => navigation.navigate('earnedpoints')} // Navigate to the unavailable days screen
         >
-          <Ionicons name="calendar-number" size={24} color="#3498DB" style={styles.icon} />
-          <Text style={styles.cardText}>Calander View</Text>
+          <Ionicons name="pricetags" size={24} color="#3498DB" style={styles.icon} />
+          <Text style={styles.cardText}>Earned Points</Text>
         </TouchableOpacity>
       </View>
 
@@ -88,27 +89,9 @@ const Dashboard = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Third Row: Completed, Canceled Works */}
-      {/* <View style={styles.cardRow}>
-        <TouchableOpacity 
-          style={styles.card} 
-          onPress={() => navigation.navigate('CompletedWorksScreen')} // Navigate to completed works screen
-        >
-          <Ionicons name="checkmark-circle" size={24} color="#3498DB" style={styles.icon} />
-          <Text style={styles.cardText}>Completed Works</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.card} 
-          onPress={() => navigation.navigate('CanceledWorksScreen')} // Navigate to canceled works screen
-        >
-          <Ionicons name="close-circle" size={24} color="#3498DB" style={styles.icon} />
-          <Text style={styles.cardText}>Canceled Works</Text>
-        </TouchableOpacity>
-      </View> */}
-
       {/* Upcoming Works Section */}
       <Text style={styles.sectionTitle}>Next Upcoming Works</Text>
-
+      <PopupButton />
       {/* Loading Indicator */}
       {loading ? (
         <ActivityIndicator size="large" color="#3498DB" />

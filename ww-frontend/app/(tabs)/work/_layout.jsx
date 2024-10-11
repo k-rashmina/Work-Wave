@@ -35,13 +35,25 @@ const PayLayout = () => {
       <Stack.Screen
         name="availabledays"
         options={{
-          title: "Update Your Availability",
+          title: "Available Days",
         }}
       />
       <Stack.Screen
         name="sheduledworks"
         options={{
           title: "Scheduled Works",
+          }}
+      />
+       <Stack.Screen
+        name="shedulecancel"
+        options={{
+          title: "Re-Scheduled Works",
+          }}
+      />
+       <Stack.Screen
+        name="earnedpoints"
+        options={{
+          title: "Earned Points",
           }}
       />
 
