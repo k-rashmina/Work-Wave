@@ -8,15 +8,12 @@ const cusUpdate = async (req, res) => {
             { email: cusEmail }, // Find customer by email
             {
                 $set: {
-                    email: req.body.email,
-                    password: req.body.password,
+                    
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
                     age: req.body.age,
-                    gender: req.body.gender,
                     telephone: req.body.telephone,
                     address: req.body.address,
-                    location: req.body.location,
                     profileImageURL: req.body.profileImageURL,
                 },
             }

@@ -24,7 +24,14 @@ const EmailPassword = () => {
     setIsCheckingEmail(true);
 
     try {
-      const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+      // Normalize the email (trim spaces and convert to lowercase)
+      const normalizedEmail = email.trim().toLowerCase();
+      const signInMethods = await fetchSignInMethodsForEmail(
+        auth,
+        normalizedEmail
+      );
+
+      console.log("Sign in methods: ", signInMethods);
 
       if (signInMethods.length > 0) {
         setErrorMessage("Email already in use. Please use a different email.");
@@ -34,11 +41,12 @@ const EmailPassword = () => {
         setErrorMessage("");
         router.push({
           pathname: "/personalDetails",
-          params: { email, password },
+          params: { email: normalizedEmail, password },
         });
       }
     } catch (error) {
       console.error("Firebase error: ", error.code, error.message);
+      // Handle specific Firebase errors
       if (error.code === "auth/invalid-email") {
         setErrorMessage("Invalid email format.");
       } else if (error.code === "auth/network-request-failed") {
@@ -53,11 +61,13 @@ const EmailPassword = () => {
     }
   };
 
+  // Validate email format
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
+  // Validate passwords match
   const validatePasswords = () => {
     if (
       (password && confirmPassword && password === confirmPassword) ||
@@ -69,10 +79,12 @@ const EmailPassword = () => {
     }
   };
 
+  // Check if passwords match on input change
   useEffect(() => {
     validatePasswords();
   }, [confirmPassword, password]);
 
+  // Validate email on input change
   useEffect(() => {
     if (email && !validateEmail(email)) {
       setErrorMessage("Invalid email format.");
@@ -133,8 +145,9 @@ const EmailPassword = () => {
             </Text>
           </TouchableOpacity>
           <Link href={"login"} style={{ textAlign: "center" }}>
-          Already have an account? <Text style={{ color: "blue" }}>LOG IN</Text>
-        </Link>
+            Already have an account?{" "}
+            <Text style={{ color: "blue" }}>LOG IN</Text>
+          </Link>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -173,7 +186,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: "red",
     fontSize: 14,
-    marginVertical: 15,
+    marginBottom: 20,
     textAlign: "center",
   },
   button: {

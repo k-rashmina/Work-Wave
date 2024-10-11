@@ -5,7 +5,6 @@ const userSchema = new schema({
   email: {
     type: String,
     required: true,
-    
   },
   password: {
     type: String,
@@ -40,13 +39,16 @@ const userSchema = new schema({
     type: {
       type: String,
       default: "Point", // GeoJSON type
-      required: false,
     },
     coordinates: {
       type: [Number], // [longitude, latitude]
       index: "2dsphere", // This will allow for geospatial queries
-      required: false,
     },
+  },
+  serviceProvider: {
+    type: Boolean,
+    default: false,
+    required: false,
   },
   category: {
     type: String,
@@ -80,11 +82,21 @@ const userSchema = new schema({
   },
   membership: {
     type: String,
-    enum: ["bronze", "silver", "gold", "platinum"],
+    enum: ["Bronze", "Silver", "Gold", "Platinum"],
     default: null,
     required: false,
   },
+  membershipDiscount: {
+    type: Number,
+    default: 0,
+    required: false,
+  },
   rating: {
+    type: Number,
+    default: 0,
+    required: false,
+  },
+  rateCount: {
     type: Number,
     default: 0,
     required: false,

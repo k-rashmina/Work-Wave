@@ -69,3 +69,5 @@ ipAddress.js
 
 sd-backend/backend_startup.sh
 sd-frontend/frontend_startup.sh
+
+.vscode
