@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator,Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons'; // Import vector icons
 import axios from 'axios'; // Import axios
 import ip from '../../../ipAddress'; 
 import { auth } from "../../../firebaseConfig";
+import PopupButton from "../../components/asiri/calanderbutton";
 
 const Dashboard = () => {
   const navigation = useNavigation(); // Access navigation
@@ -34,24 +35,57 @@ const Dashboard = () => {
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, []);
 
+  // const handleReschedule = async (work) => {
+  //   try {
+  //     const requestData = {
+  //       assignmentId: work._id,
+  //       workerId: work.workerId,
+  //     };
+  //     await axios.put(`http://${ip}:5000/shedule/reschedule-worker`, requestData);
+  //     // You can also handle success response here, like showing a message or updating the state
+  //   } catch (error) {
+  //     console.error('Error rescheduling work:', error);
+  //   }
+  // };
   const handleReschedule = async (work) => {
-    try {
-      const requestData = {
-        assignmentId: work._id,
-        workerId: work.workerId,
-      };
-      await axios.put(`http://${ip}:5000/shedule/reschedule-worker`, requestData);
-      // You can also handle success response here, like showing a message or updating the state
-    } catch (error) {
-      console.error('Error rescheduling work:', error);
-    }
+    // Show a confirmation alert with "Yes" and "No" options
+    Alert.alert(
+      "Confirm Reschedule", // Title of the alert
+      "Are you sure you want to reschedule this work?", // Message in the alert
+      [
+        {
+          text: "No", // Button text for "No"
+          onPress: () => console.log("Reschedule action was canceled by the user."),
+          style: "cancel", // Optional: adds a subtle styling to the "No" button
+        },
+        {
+          text: "Yes", // Button text for "Yes"
+          onPress: async () => {
+            try {
+              const requestData = {
+                assignmentId: work._id,
+                workerId: work.workerId,
+              };
+              await axios.put(`http://${ip}:5000/shedule/reschedule-worker`, requestData);
+              
+              // Show a success message or update the UI state
+              Alert.alert("Success", "Work has been successfully rescheduled.");
+            } catch (error) {
+              console.error('Error rescheduling work:', error);
+              Alert.alert("Error", "There was an error while rescheduling. Please try again.");
+            }
+          },
+        },
+      ],
+      { cancelable: false } // Optional: prevent closing the dialog by tapping outside
+    );
   };
 
   return (
     <ScrollView style={styles.container}>
       {/* Upcoming Works Section */}
       <Text style={styles.sectionTitle}>On Going Tasks</Text>
-
+     
       {/* First Row: Available, Unavailable Days */}
       <View style={styles.cardRow}>
         <TouchableOpacity 
@@ -63,10 +97,10 @@ const Dashboard = () => {
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.card} 
-          onPress={() => navigation.navigate('UnavailableDaysScreen')} // Navigate to the unavailable days screen
+          onPress={() => navigation.navigate('earnedpoints')} // Navigate to the unavailable days screen
         >
-          <Ionicons name="calendar-number" size={24} color="#3498DB" style={styles.icon} />
-          <Text style={styles.cardText}>Calander View</Text>
+          <Ionicons name="pricetags" size={24} color="#3498DB" style={styles.icon} />
+          <Text style={styles.cardText}>Earned Points</Text>
         </TouchableOpacity>
       </View>
 
@@ -88,33 +122,15 @@ const Dashboard = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Third Row: Completed, Canceled Works */}
-      {/* <View style={styles.cardRow}>
-        <TouchableOpacity 
-          style={styles.card} 
-          onPress={() => navigation.navigate('CompletedWorksScreen')} // Navigate to completed works screen
-        >
-          <Ionicons name="checkmark-circle" size={24} color="#3498DB" style={styles.icon} />
-          <Text style={styles.cardText}>Completed Works</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.card} 
-          onPress={() => navigation.navigate('CanceledWorksScreen')} // Navigate to canceled works screen
-        >
-          <Ionicons name="close-circle" size={24} color="#3498DB" style={styles.icon} />
-          <Text style={styles.cardText}>Canceled Works</Text>
-        </TouchableOpacity>
-      </View> */}
-
       {/* Upcoming Works Section */}
       <Text style={styles.sectionTitle}>Next Upcoming Works</Text>
-
+      <PopupButton />
       {/* Loading Indicator */}
       {loading ? (
         <ActivityIndicator size="large" color="#3498DB" />
       ) : (
         works.map((work) => (
-          <View key={work.assignmentId} style={styles.workCard}>
+          <View key={work.assignmentId || work._id} style={styles.workCard}>
             <Ionicons name="briefcase-outline" size={24} color="#3498DB" />
             <View style={styles.workDetails}>
               <Text style={styles.workName}>Customer: {work.jobOwner.firstName} {work.jobOwner.lastName}</Text>
