@@ -130,7 +130,7 @@ const Dashboard = () => {
         <ActivityIndicator size="large" color="#3498DB" />
       ) : (
         works.map((work) => (
-          <View key={work.assignmentId} style={styles.workCard}>
+          <View key={work.assignmentId || work._id} style={styles.workCard}>
             <Ionicons name="briefcase-outline" size={24} color="#3498DB" />
             <View style={styles.workDetails}>
               <Text style={styles.workName}>Customer: {work.jobOwner.firstName} {work.jobOwner.lastName}</Text>
