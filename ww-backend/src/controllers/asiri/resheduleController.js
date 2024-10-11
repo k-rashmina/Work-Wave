@@ -2,9 +2,9 @@ const AssignedWorker = require("../../models/kalindu/jobs");
 const User = require("../../models/chamath/userModel");
 const moment = require("moment");
 
-// Assign a worker with the next available date
-const assignWorkerWithNextAvailableDate = async (req, res) => {
-  const { workerId } = req.params; // Get workerId from URL params
+// Reschedule a worker's assignment
+const rescheduleWorkerAssignment = async (req, res) => {
+  const { workerId, assignmentId } = req.body; // Get workerId and assignmentId from request body
 
   try {
     // Fetch the user (service provider) and their available days
@@ -15,38 +15,35 @@ const assignWorkerWithNextAvailableDate = async (req, res) => {
       return res.status(404).json({ message: "No available dates found for this worker." });
     }
 
-    // Check available days
-    console.log("Available days:", user.availableDays);
+    // Fetch the existing assignment
+    const existingAssignment = await AssignedWorker.findById(assignmentId);
+    if (!existingAssignment) {
+      return res.status(404).json({ message: "Assignment not found." });
+    }
 
-    // Calculate the next available date from the user's available days
-    let nextAvailableDate = await calculateNextAvailableDate(workerId, user.availableDays);
+    // Find the soonest available date for the worker
+    const newAssignedDate = await findNextAvailableDate(workerId, user.availableDays);
 
-    if (!nextAvailableDate) {
+    if (!newAssignedDate) {
       return res.status(400).json({ message: "No upcoming available date found." });
     }
 
-    // Create the new assignment with the workerId and the assigned date (in UTC)
-    const newAssignment = new AssignedWorker({
-      workerId, // Save the worker's ObjectId
-      assignedDate: nextAvailableDate, // Save the next available date
-    });
-
-    console.log("New assignment:", newAssignment); // Log the new assignment
-
-    await newAssignment.save();
+    // Update the assignment with the new date
+    existingAssignment.assignedDate = newAssignedDate;
+    await existingAssignment.save();
 
     res.json({
-      message: "Worker assigned successfully.",
-      newAssignment,
+      message: "Worker assignment rescheduled successfully.",
+      updatedAssignment: existingAssignment,
     });
   } catch (error) {
     console.error("Error details:", error); // Log the full error for debugging
-    res.status(500).json({ message: "Error assigning worker", error: error.message || error });
+    res.status(500).json({ message: "Error rescheduling worker assignment", error: error.message || error });
   }
 };
 
-// Function to calculate the next available date based on available days (using UTC)
-async function calculateNextAvailableDate(workerId, availableDays) {
+// Function to find the next available date based on worker's available days
+async function findNextAvailableDate(workerId, availableDays) {
   const daysOfWeekMap = {
     sunday: 0,
     monday: 1,
@@ -60,12 +57,10 @@ async function calculateNextAvailableDate(workerId, availableDays) {
   const currentDate = moment().utc(); // Use UTC for current date
   let nextDate = null;
 
-  // Get the next available date based on user's available days
-  for (let i = 1; i <= 7; i++) { // Start from 1 to avoid today
-    // Check each day of the week
+  for (let i = 1; i <= 14; i++) { // Check for the next 14 days
     const dayIndex = (currentDate.day() + i) % 7; // Get the next day index
     const dayName = Object.keys(daysOfWeekMap).find(key => daysOfWeekMap[key] === dayIndex);
-    
+
     if (availableDays.map(day => day.toLowerCase()).includes(dayName)) {
       // Calculate the corresponding date
       const calculatedDate = currentDate.clone().add(i, "days");
@@ -85,4 +80,5 @@ async function calculateNextAvailableDate(workerId, availableDays) {
   return null; // Return null if no available date found
 }
 
-module.exports = { assignWorkerWithNextAvailableDate };
+module.exports = {  rescheduleWorkerAssignment };
+

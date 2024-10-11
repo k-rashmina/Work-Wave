@@ -2,8 +2,8 @@ const AssignedWorker = require("../../models/kalindu/jobs");
 const User = require("../../models/chamath/userModel");
 const moment = require("moment");
 
-// Assign a worker with the next available date
-const assignWorkerWithNextAvailableDate = async (req, res) => {
+// Get the next available date for a worker
+const getNextAvailableDate = async (req, res) => {
   const { workerId } = req.params; // Get workerId from URL params
 
   try {
@@ -25,23 +25,14 @@ const assignWorkerWithNextAvailableDate = async (req, res) => {
       return res.status(400).json({ message: "No upcoming available date found." });
     }
 
-    // Create the new assignment with the workerId and the assigned date (in UTC)
-    const newAssignment = new AssignedWorker({
-      workerId, // Save the worker's ObjectId
-      assignedDate: nextAvailableDate, // Save the next available date
-    });
-
-    console.log("New assignment:", newAssignment); // Log the new assignment
-
-    await newAssignment.save();
-
+    // Respond with the next available date
     res.json({
-      message: "Worker assigned successfully.",
-      newAssignment,
+      message: "Next available date retrieved successfully.",
+      nextAvailableDate,
     });
   } catch (error) {
     console.error("Error details:", error); // Log the full error for debugging
-    res.status(500).json({ message: "Error assigning worker", error: error.message || error });
+    res.status(500).json({ message: "Error retrieving available date", error: error.message || error });
   }
 };
 
@@ -85,4 +76,4 @@ async function calculateNextAvailableDate(workerId, availableDays) {
   return null; // Return null if no available date found
 }
 
-module.exports = { assignWorkerWithNextAvailableDate };
+module.exports = { getNextAvailableDate }; // Export the modified function
