@@ -13,17 +13,19 @@ const Profile = () => {
   const isFocused = useIsFocused(); // Add isFocused to track when the screen is focused
 
   const [user, setUser] = useState({
-    firstname: '',
+    firstName: '',
     lastName: '',
     profileImageURL: '',
   });
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false); // State for pull-to-refresh
 
-  const email = auth.currentUser.email;
+  const email = auth.currentUser ? auth.currentUser.email : null; // Check if auth.currentUser exists
 
   // Function to fetch user details
   const fetchUserDetails = async () => {
+    if (!email) return; // Return early if the user is not logged in
+
     try {
       const response = await axios.get(`http://${ip}:5000/user/cusRead/${email}`);
       setUser(response.data);
@@ -37,10 +39,10 @@ const Profile = () => {
 
   // useEffect that runs when the screen is focused
   useEffect(() => {
-    if (isFocused) {
+    if (isFocused && email) {
       fetchUserDetails(); // Re-fetch user details when the screen is focused
     }
-  }, [isFocused]); // Dependency on isFocused
+  }, [isFocused, email]); // Dependency on isFocused and email
 
   // Pull-to-refresh function
   const onRefresh = useCallback(() => {
@@ -49,10 +51,14 @@ const Profile = () => {
   }, []);
 
   // Logout handler
-  const handleLogout = () => {
-    logoutUser().then(() => {
-      router.push("/login");
-    });
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      router.push("/login"); // Redirect to login screen after successful logout
+    } catch (error) {
+      console.error('Error logging out:', error);
+      Alert.alert('Error', 'Failed to log out.');
+    }
   };
 
   if (loading) {
@@ -104,7 +110,7 @@ const Profile = () => {
       </TouchableOpacity>
     </ScrollView>
   );
-}
+};
 
 export default Profile;
 
