@@ -6,6 +6,8 @@ const jobController = require("../controllers/yohan/jobController");
 
 router.post("/createjob", (req, res) => createJobController(req, res));
 
+router.get("/jspo/:id", (req, res) => jobController.getJobById(req, res));
+
 router.get("/jo/:email", (req, res) =>
   jobController.getJobsForJobOwner(req, res)
 );

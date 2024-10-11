@@ -11,6 +11,17 @@ exports.createJob = async (req, res) => {
   }
 };
 
+//Get a specific job by its id
+exports.getJobById = async (req, res) => {
+  try {
+    const job = await jobService.getJobById(req.params.id);
+    res.status(200).json(job);
+  } catch (error) {
+    console.log("Error getting job by id: ", error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Get all jobs for a specific job owner
 exports.getJobsForJobOwner = async (req, res) => {
   try {

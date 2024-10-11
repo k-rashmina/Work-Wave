@@ -1,11 +1,16 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
+
 import { Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+
+import { Link } from "expo-router";
+
 
 const Pay = () => {
   return (
     <View style={styles.container}>
+
       {/* <Text style={styles.title}>Dashboard</Text> */}
 
       {/* Row 1 with two cards */}
@@ -37,6 +42,15 @@ const Pay = () => {
           <Link href="/settings" style={styles.cardLink}>Go to Settings</Link>
         </TouchableOpacity>
       </View>
+
+      <Text>Work</Text>
+
+      <Link href={"/work/availabledays"}>Go to Available Days</Link>
+      <Link href={"/work/sheduledashboard"}>Go to Shedule Dashboard</Link>
+      <Link href={"/work/availableWorks"}>Go to Available Works</Link>
+
+      <Link href={"/work/sheduledashboard"}>Go to Shedule Dashboard</Link>
+
     </View>
   );
 };
