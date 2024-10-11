@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons'; // Import vector icons
 import axios from 'axios'; // Import axios
 import ip from '../../../ipAddress'; 
 import { auth } from "../../../firebaseConfig";
+import PopupButton from "../../components/asiri/calanderbutton";
 
 const Dashboard = () => {
   const navigation = useNavigation(); // Access navigation
@@ -51,7 +52,7 @@ const Dashboard = () => {
     <ScrollView style={styles.container}>
       {/* Upcoming Works Section */}
       <Text style={styles.sectionTitle}>On Going Tasks</Text>
-
+     
       {/* First Row: Available, Unavailable Days */}
       <View style={styles.cardRow}>
         <TouchableOpacity 
@@ -108,7 +109,7 @@ const Dashboard = () => {
 
       {/* Upcoming Works Section */}
       <Text style={styles.sectionTitle}>Next Upcoming Works</Text>
-
+      <PopupButton />
       {/* Loading Indicator */}
       {loading ? (
         <ActivityIndicator size="large" color="#3498DB" />
