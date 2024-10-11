@@ -4,7 +4,7 @@ import React from "react";
 import { Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
-import { Link } from "expo-router";
+
 
 
 const Pay = () => {
@@ -43,13 +43,13 @@ const Pay = () => {
         </TouchableOpacity>
       </View>
 
-      <Text>Work</Text>
+      {/* <Text>Work</Text> */}
 
-      <Link href={"/work/availabledays"}>Go to Available Days</Link>
+      {/* <Link href={"/work/availabledays"}>Go to Available Days</Link>
       <Link href={"/work/sheduledashboard"}>Go to Shedule Dashboard</Link>
       <Link href={"/work/availableWorks"}>Go to Available Works</Link>
 
-      <Link href={"/work/sheduledashboard"}>Go to Shedule Dashboard</Link>
+      <Link href={"/work/sheduledashboard"}>Go to Shedule Dashboard</Link> */}
 
     </View>
   );

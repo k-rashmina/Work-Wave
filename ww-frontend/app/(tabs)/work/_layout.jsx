@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Stack } from "expo-router";
 import Header from "../../components/common/Header";
-
+import { Link } from "expo-router";
 const PayLayout = () => {
   const headerOptions = Header();
   return (
@@ -33,9 +33,8 @@ const PayLayout = () => {
           title: "Dashboard",
         }}/>
 
-          title: "Worker Dashboard",
-        }}
-      />
+          
+      
 
 
       <Stack.Screen
@@ -62,9 +61,8 @@ const PayLayout = () => {
 
           title: "Customer Ratings",
           }}
-
-          title: "Earned Points",
-        }}
+        
+         
       />
       <Stack.Screen
         name="availableWorks"
