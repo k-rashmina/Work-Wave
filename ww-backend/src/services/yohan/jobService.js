@@ -15,6 +15,19 @@ class JobService {
     }
   }
 
+  //Get a specific job by its id
+  async getJobById(jobId) {
+    try {
+      const job = await jobDataAccess.getJobById(jobId);
+      return job;
+    } catch (error) {
+      throw new Error(
+        console.log("Error getting job by id: ", error.message),
+        `Error occurred while getting job by id: ${error.message}`
+      );
+    }
+  }
+
   //Get all jobs for a specific job owner
   async getJobsForJobOwner(email) {
     try {
@@ -59,6 +72,7 @@ class JobService {
       const jobs = await jobDataAccess.getPendingJobsForServiceProvider(
         serviceProvider._id
       );
+      return jobs;
     } catch (error) {
       throw new Error(
         console.log(
