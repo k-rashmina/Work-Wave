@@ -6,6 +6,21 @@ import { Alert } from "react-native";
 const PORT = 5000;
 const BASE_URL = `http://${ip}:${PORT}`;
 
+//get a specific job by job id
+export const getJobById = async (jobId) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/job/jspo/${jobId}`);
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      console.log("Error getting job by id");
+    }
+  } catch (error) {
+    console.log("Error getting job by id: ", error.response.data);
+    return error.response.data;
+  }
+};
+
 //get all jobs for a specific job owner
 export const getJobsForJobOwner = async () => {
   try {
@@ -152,6 +167,7 @@ export const getAcceptedJobsForServiceProvider = async () => {
 };
 
 module.exports = {
+  getJobById,
   getJobsForJobOwner,
   acceptBidForJob,
   getPendingJobsForServiceProvider,
