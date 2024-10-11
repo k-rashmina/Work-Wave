@@ -12,7 +12,7 @@ const jobsSchema = new mongoose.Schema(
       required: true,
     },
     jobImages: {
-      type: [String],
+      type: String,
     },
     jobCategory: {
       type: String,

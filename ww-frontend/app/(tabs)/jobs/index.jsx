@@ -1,22 +1,15 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { Link } from "expo-router";
 
-const Dashboard = () => {
+const index = () => {
   return (
-    <View style={styles.container}>
-      <Text>Jobs</Text>
+    <View>
+      <Link href={"/jobs/jobpostingscreen"}>post</Link>
     </View>
   );
 };
 
-export default Dashboard;
+export default index;
 
-const styles = StyleSheet.create({
-  container: {
-    display: "flex",
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-  },
-});
+const styles = StyleSheet.create({});
