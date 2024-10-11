@@ -64,10 +64,10 @@ const Dashboard = () => {
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.card} 
-          onPress={() => navigation.navigate('UnavailableDaysScreen')} // Navigate to the unavailable days screen
+          onPress={() => navigation.navigate('earnedpoints')} // Navigate to the unavailable days screen
         >
-          <Ionicons name="calendar-number" size={24} color="#3498DB" style={styles.icon} />
-          <Text style={styles.cardText}>Calander View</Text>
+          <Ionicons name="pricetags" size={24} color="#3498DB" style={styles.icon} />
+          <Text style={styles.cardText}>Earned Points</Text>
         </TouchableOpacity>
       </View>
 
@@ -88,24 +88,6 @@ const Dashboard = () => {
           <Text style={styles.cardText}>Rescheduled Works</Text>
         </TouchableOpacity>
       </View>
-
-      {/* Third Row: Completed, Canceled Works */}
-      {/* <View style={styles.cardRow}>
-        <TouchableOpacity 
-          style={styles.card} 
-          onPress={() => navigation.navigate('CompletedWorksScreen')} // Navigate to completed works screen
-        >
-          <Ionicons name="checkmark-circle" size={24} color="#3498DB" style={styles.icon} />
-          <Text style={styles.cardText}>Completed Works</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.card} 
-          onPress={() => navigation.navigate('CanceledWorksScreen')} // Navigate to canceled works screen
-        >
-          <Ionicons name="close-circle" size={24} color="#3498DB" style={styles.icon} />
-          <Text style={styles.cardText}>Canceled Works</Text>
-        </TouchableOpacity>
-      </View> */}
 
       {/* Upcoming Works Section */}
       <Text style={styles.sectionTitle}>Next Upcoming Works</Text>
