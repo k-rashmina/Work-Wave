@@ -8,7 +8,7 @@ import ip from '../../../ipAddress'; // Import the IP address
 
 const ServiceRating = ({ navigation }) => {
   const route = useRoute(); // Get the route object to extract params
-  const [serviceProviderEmail, setServiceProviderEmail] = useState('gimtharu@gmail.com'); // Email state
+  const [serviceProviderEmail, setServiceProviderEmail] = useState('asirialwis@yahoo.com'); // Email state
   const [rating, setRating] = useState(3);  // Default rating
   const [review, setReview] = useState('');
   const [loggedInCustomerEmail, setLoggedInCustomerEmail] = useState(''); // State to hold logged-in customer email

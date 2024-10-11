@@ -26,7 +26,20 @@ const ProfileLayout = () => {
           title: "Profile",
         }}
       />
+      <Stack.Screen
+        name="userDetails"
+        options={{
+          title: "User Details",
+        }}
+      />
+      <Stack.Screen
+        name="userRating"
+        options={{
+          title: "User Rating",
+        }}
+      />
     </Stack>
+    
   );
 };
 

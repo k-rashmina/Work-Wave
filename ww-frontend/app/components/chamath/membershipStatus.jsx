@@ -87,7 +87,11 @@ const MembershipStatus = () => {
   return (
     <View style={styles.membershipContainer}>
       {/* Membership Information */}
-      <Text style={styles.membershipTitle}>Membership - {membership}</Text>
+      <Text style={styles.membershipTitle}>
+        Membership - {membership ? membership.charAt(0).toUpperCase() + membership.slice(1) : 'N/A'}
+      </Text>
+
+
       <Text style={styles.pointsText}>
         {pointsToNextLevel} Points more to {nextLevel}
       </Text>
@@ -123,7 +127,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 20,
-    marginTop: 20,
+    marginTop: 0,
     shadowColor: '#000',
     shadowOffset: { width: 1, height: 2 },
     shadowOpacity: 0.1,
