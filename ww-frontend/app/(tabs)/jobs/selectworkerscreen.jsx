@@ -7,12 +7,14 @@ import {
   TouchableOpacity,
   Button,
   Image,
+  Alert,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 import { getNearbyWorkers } from "../../../lib/apiRequests/jobsApiClient";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Redirect, useLocalSearchParams, useRouter } from "expo-router";
+import ip from "../../../ipAddress";
 
 const workers = [
   {
@@ -57,6 +59,19 @@ const WorkerSelectionScreen = () => {
 
   const cusLocation = JSON.parse(jobLocation);
 
+  let jobDetails = {
+    jobTitle,
+    jobDescription,
+    jobImages,
+    jobCategory,
+    jobType,
+    jobBudget,
+    jobStatus,
+    jobOwner,
+    jobLocation: cusLocation,
+    bidders: [],
+  };
+
   const [nearbyWorkers, setNearbyWorkers] = useState([]);
   const [selectedWorkers, setSelectedWorkers] = useState([]);
 
@@ -88,6 +103,41 @@ const WorkerSelectionScreen = () => {
   const isWorkerSelected = (workerId) => selectedWorkers.includes(workerId);
 
   // console.log(selectedWorkers);
+
+  const handleJobCreate = async () => {
+    if (selectedWorkers.length == 0) {
+      Alert.alert(
+        "Please select one or more worker to start the bidding process"
+      );
+      return;
+    }
+
+    selectedWorkers.map((select) => {
+      const found = nearbyWorkers.find(
+        (element) => element.workerDetails._id == select
+      );
+
+      jobDetails.bidders.push({
+        bidderId: found.workerDetails._id,
+        bidStatus: "pending",
+        distance: found.distanceValues.distance.value,
+      });
+    });
+
+    const result = await axios.post(
+      `http://${ip}:5000/job/createjob`,
+      jobDetails
+    );
+
+    if (result) {
+      Alert.alert("Job successfully created");
+      router.replace("/jobs");
+    } else {
+      Alert.alert("Job creation unsuccessful");
+    }
+
+    // console.log(jobDetails);
+  };
 
   return (
     <View style={styles.container}>
@@ -194,7 +244,7 @@ const WorkerSelectionScreen = () => {
       <TouchableOpacity
         style={styles.biddingButton}
         disabled={selectedWorkers.length === 0}
-        onPress={() => alert(`Selected Workers: ${selectedWorkers.join(", ")}`)}
+        onPress={() => handleJobCreate()}
       >
         <Text style={styles.biddingButtonText}>Start Bidding Process</Text>
       </TouchableOpacity>
