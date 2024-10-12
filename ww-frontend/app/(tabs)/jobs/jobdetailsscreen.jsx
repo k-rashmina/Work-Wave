@@ -8,11 +8,14 @@ import {
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import axios from "axios"; // assuming you are using axios for API requests
+import { TouchableOpacity } from "react-native";
 
 const JobDetailsScreen = () => {
   const { job } = useLocalSearchParams();
   let jobDetails = JSON.parse(job);
-  console.log(jobDetails.bidders);
+  // console.log(jobDetails.bidders);
+
+  const [selectedWorkers, setSelectedWorkers] = useState("");
 
   if (!jobDetails) {
     return (
@@ -21,6 +24,12 @@ const JobDetailsScreen = () => {
       </View>
     );
   }
+
+  const toggleWorkerSelection = (workerId) => {
+    setSelectedWorkers(workerId);
+  };
+
+  console.log(selectedWorkers);
 
   return (
     <ScrollView style={styles.container}>
@@ -51,10 +60,15 @@ const JobDetailsScreen = () => {
       <Text style={styles.label}>Bidders:</Text>
       {jobDetails.bidders && jobDetails.bidders.length > 0 ? (
         jobDetails.bidders.map((bidder, index) => (
-          <View key={index} style={styles.bidderContainer}>
+          <TouchableOpacity
+            key={index}
+            style={styles.bidderContainer}
+            onPress={() => toggleWorkerSelection(bidder.bidderId)}
+          >
             <Text>Bidder ID: {bidder.bidderId}</Text>
             <Text>Bid Status: {bidder.bidStatus}</Text>
-          </View>
+            <Text>Bid Amount: {bidder.bidAmount}</Text>
+          </TouchableOpacity>
         ))
       ) : (
         <Text>No bidders yet.</Text>

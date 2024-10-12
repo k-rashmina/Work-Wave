@@ -30,7 +30,7 @@ const JobPostingScreen = () => {
   const [jobType, setJobType] = useState(true);
   const [jobCategory, setJobCategory] = useState("plumbing");
   const [jobLocation, setJobLocation] = useState({});
-  const [jobImages, setJobImages] = useState(null);
+  const [jobImages, setJobImages] = useState([]);
   const [jobOwner, setJobOwner] = useState(null);
   const [address, setAddress] = useState("");
 
@@ -88,7 +88,7 @@ const JobPostingScreen = () => {
       await uploadBytes(storageRef, blob);
       const downloadURL = await getDownloadURL(storageRef);
       // console.log("Image uploaded successfully:", downloadURL);
-      setJobImages(downloadURL);
+      setJobImages((prev) => [...prev, downloadURL]);
     } catch (error) {
       console.error("Upload failed:", error);
     }
@@ -176,9 +176,14 @@ const JobPostingScreen = () => {
         <TouchableOpacity style={styles.chooseFileButton} onPress={pickImage}>
           <Text style={styles.chooseFileText}>Choose files</Text>
         </TouchableOpacity>
-        {jobImages && (
-          <Image source={{ uri: jobImages }} style={styles.previewImage} />
-        )}
+        {jobImages &&
+          jobImages.map((image, index) => (
+            <Image
+              key={index}
+              source={{ uri: image }}
+              style={styles.previewImage}
+            />
+          ))}
 
         <Text style={styles.label}>Suggested Pricing</Text>
         <TextInput
