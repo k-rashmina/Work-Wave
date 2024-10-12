@@ -9,20 +9,23 @@ const BASE_URL = `http://${ip}:${PORT}`;
 // Create a new user
 export const createUser = async (userDetails) => {
   try {
-    const response = await axios.post(`${BASE_URL}/user/cusCreate`, userDetails);
+    const response = await axios.post(
+      `${BASE_URL}/user/cusCreate`,
+      userDetails
+    );
     if (response.status === 200) {
-      Alert.alert('Success', 'Signup successful!');
+      Alert.alert("Success", "Signup successful!");
     } else {
-      Alert.alert('Error', 'Signup failed. Please try again.');
+      Alert.alert("Error", "Signup failed. Please try again.");
     }
     return response.data;
-    
-    
   } catch (error) {
-    console.error('Error signing up:', error);
-    Alert.alert('Error', 'An error occurred during signup. Please try again later.');
+    console.error("Error signing up:", error);
+    Alert.alert(
+      "Error",
+      "An error occurred during signup. Please try again later."
+    );
   }
-
 };
 
 // Get user details
@@ -66,7 +69,9 @@ export const deleteUser = async () => {
     const user = auth.currentUser;
     if (user) {
       const email = user.email;
-      const response = await axios.delete(`${BASE_URL}/user/cusDelete/${email}`);
+      const response = await axios.delete(
+        `${BASE_URL}/user/cusDelete/${email}`
+      );
       return response.data;
     } else {
       console.log("No user found");
@@ -89,10 +94,29 @@ export const getAllUsers = async () => {
   }
 };
 
+// Get user id give the email
+export const getUserId = async () => {
+  const user = auth.currentUser;
+  try {
+    if (user) {
+      const email = user.email;
+      const response = await axios.get(`${BASE_URL}/user/getcusid/${email}`);
+      return response.data;
+    } else {
+      console.log("No user found");
+      return false;
+    }
+  } catch (error) {
+    console.log("Error getting user: ", error.response.data);
+    return error.response.data;
+  }
+};
+
 module.exports = {
   createUser,
   getUser,
   updateUser,
   deleteUser,
   getAllUsers,
+  getUserId,
 };
