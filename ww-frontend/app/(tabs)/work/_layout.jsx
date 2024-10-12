@@ -71,6 +71,13 @@ const PayLayout = () => {
       />
 
       <Stack.Screen
+        name="acceptedWorks/[acceptedWorkId]"
+        options={{
+          title: "Work Details",
+        }}
+      />
+
+      <Stack.Screen
         name="myWorks"
         options={{
           title: "My Works",
