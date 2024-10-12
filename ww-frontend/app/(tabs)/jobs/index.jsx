@@ -42,7 +42,12 @@ const Dashboard = () => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => router.push(`jobs/jobDetails/${item._id}`)}
+      onPress={() =>
+        router.push({
+          pathname: `jobs/jobdetailsscreen`,
+          params: { job: JSON.stringify(item) },
+        })
+      }
     >
       {item.jobImages && item.jobImages.length > 0 && item.jobImages[0] ? (
         <Image
@@ -84,7 +89,7 @@ const Dashboard = () => {
       {/* Floating Button for Creating Job */}
       <TouchableOpacity
         style={styles.floatingButton}
-        onPress={() => router.push("CreateJob")} // Navigate to the CreateJob page
+        onPress={() => router.push("/jobs/jobpostingscreen")} // Navigate to the CreateJob page
       >
         <Icon name="plus" size={30} color="#fff" />
       </TouchableOpacity>
@@ -92,7 +97,7 @@ const Dashboard = () => {
   );
 };
 
-export default index;
+export default Dashboard;
 
 const styles = StyleSheet.create({
   safeArea: {

@@ -19,6 +19,12 @@ class JobDataAccess {
     const jobs = await jobModel.find({
       jobOwner: jobOwnerId,
     });
+    // .populate({
+    //   path: "users",
+    //   strictPopulate: false,
+    // })
+    // .exec();
+    // console.log("jobs", jobs);
     return jobs;
   }
 
