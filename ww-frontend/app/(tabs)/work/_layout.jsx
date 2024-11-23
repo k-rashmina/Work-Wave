@@ -29,13 +29,9 @@ const PayLayout = () => {
       <Stack.Screen
         name="sheduledashboard"
         options={{
-
           title: "Dashboard",
-        }}/>
-
-          
-      
-
+        }}
+      />
 
       <Stack.Screen
         name="availabledays"
@@ -58,11 +54,8 @@ const PayLayout = () => {
       <Stack.Screen
         name="earnedpoints"
         options={{
-
           title: "Customer Ratings",
-          }}
-        
-         
+        }}
       />
       <Stack.Screen
         name="availableWorks"
@@ -75,7 +68,27 @@ const PayLayout = () => {
         options={{
           title: "Work Details",
         }}
+      />
 
+      <Stack.Screen
+        name="acceptedWorks/[acceptedWorkId]"
+        options={{
+          title: "Work Details",
+        }}
+      />
+
+      <Stack.Screen
+        name="myWorks"
+        options={{
+          title: "My Works",
+        }}
+      />
+
+      <Stack.Screen
+        name="myBids"
+        options={{
+          title: "My Bids",
+        }}
       />
     </Stack>
   );

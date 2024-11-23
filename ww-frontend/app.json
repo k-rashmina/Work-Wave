@@ -13,12 +13,20 @@
       "backgroundColor": "#3498DB"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyB9jM4BanCgPocT6KcrCcEsuYvE_yfdyYU"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/images/WORKWAVELOGO.png",
         "backgroundColor": "#ffffff"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyB9jM4BanCgPocT6KcrCcEsuYvE_yfdyYU"
+        }
       }
     },
     "web": {

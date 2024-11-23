@@ -1,56 +1,79 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 
-import { Link } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-
-
-
+import { Link, router } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 const Pay = () => {
   return (
     <View style={styles.container}>
-
       {/* <Text style={styles.title}>Dashboard</Text> */}
 
       {/* Row 1 with two cards */}
       <View style={styles.cardRow}>
-        <TouchableOpacity style={styles.card}>
-          <Ionicons name="calendar" size={36} color="#3498DB" style={styles.icon} />
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => {
+            router.push("/work/sheduledashboard");
+          }}
+        >
+          <Ionicons
+            name="calendar"
+            size={36}
+            color="#3498DB"
+            style={styles.icon}
+          />
           <Text style={styles.cardText}>Work Shedules</Text>
-          <Link href="/work/sheduledashboard" style={styles.cardLink}>Go to Dashboard</Link>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.card}>
-          <Ionicons name="cash" size={36} color="#3498DB" style={styles.icon} />
-          <Text style={styles.cardText}>Bid System</Text>
-          <Link href="/payments" style={styles.cardLink}>Go to View</Link>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => {
+            router.push("/work/availableWorks");
+          }}
+        >
+          <Ionicons
+            name="search"
+            size={36}
+            color="#3498DB"
+            style={styles.icon}
+          />
+          <Text style={styles.cardText}>Available Works</Text>
         </TouchableOpacity>
       </View>
 
       {/* Row 2 with two cards */}
       <View style={styles.cardRow}>
-        <TouchableOpacity style={styles.card}>
-          <Ionicons name="briefcase" size={36} color="#3498DB" style={styles.icon} />
-          <Text style={styles.cardText}>Other</Text>
-          <Link href="/schedule" style={styles.cardLink}>Other</Link>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => {
+            router.push("/work/myBids");
+          }}
+        >
+          <Ionicons
+            name="pricetags"
+            size={36}
+            color="#3498DB"
+            style={styles.icon}
+          />
+          <Text style={styles.cardText}>My Bids</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.card}>
-          <Ionicons name="settings" size={36} color="#3498DB" style={styles.icon} />
-          <Text style={styles.cardText}>Settings</Text>
-          <Link href="/settings" style={styles.cardLink}>Go to Settings</Link>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => {
+            router.push("/work/myWorks");
+          }}
+        >
+          <Ionicons
+            name="briefcase"
+            size={36}
+            color="#3498DB"
+            style={styles.icon}
+          />
+          <Text style={styles.cardText}>My Works</Text>
         </TouchableOpacity>
       </View>
-
-      {/* <Text>Work</Text> */}
-
-      {/* <Link href={"/work/availabledays"}>Go to Available Days</Link>
-      <Link href={"/work/sheduledashboard"}>Go to Shedule Dashboard</Link>
-      <Link href={"/work/availableWorks"}>Go to Available Works</Link>
-
-      <Link href={"/work/sheduledashboard"}>Go to Shedule Dashboard</Link> */}
-
     </View>
   );
 };
@@ -70,6 +93,7 @@ const styles = StyleSheet.create({
     color: "#3498DB",
     textAlign: "center",
     marginBottom: 20,
+    fontFamily: "sans-serif-condensed",
   },
   cardRow: {
     flexDirection: "row",
